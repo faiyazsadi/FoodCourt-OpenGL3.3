@@ -1,0 +1,97 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 30.11.2011 16:27:07
+
+newmtl Stove_with_Range_cook_panel
+	Ns 39.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.5850 0.5850 0.5850
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Stove_with_Range_cook_panel.jpg
+	map_Kd Stove_with_Range_cook_panel.jpg
+
+newmtl Stove_with_Range_glass
+	Ns 22.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0784 0.0784 0.0784
+	Kd 0.0784 0.0784 0.0784
+	Ks 0.3510 0.3510 0.3510
+	Ke 0.0000 0.0000 0.0000
+	map_d Stove_with_Range_glass.jpg
+
+newmtl Stove_with_Range_metall_gray
+	Ns 41.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5216 0.5216 0.5216
+	Kd 0.5216 0.5216 0.5216
+	Ks 0.6300 0.6300 0.6300
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Stove_with_Range_logo
+	Ns 41.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Stove_with_Range_nameplate.jpg
+	map_Kd Stove_with_Range_nameplate.jpg
+
+newmtl Stove_with_Range_steel
+	Ns 22.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.7255 0.7255 0.7255
+	Kd 0.7255 0.7255 0.7255
+	Ks 0.3510 0.3510 0.3510
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Stove_with_Range_steel.jpg
+	map_Kd Stove_with_Range_steel.jpg
+	map_bump Stove_with_Range_steel.jpg
+	bump Stove_with_Range_steel.jpg
+
+newmtl Stove_with_Range_panel
+	Ns 39.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.5850 0.5850 0.5850
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Stove_with_Range_panel.jpg
+	map_Kd Stove_with_Range_panel.jpg
+
+newmtl Stove_with_Range_metall
+	Ns 22.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0863 0.0863 0.0863
+	Kd 0.0863 0.0863 0.0863
+	Ks 0.3510 0.3510 0.3510
+	Ke 0.0000 0.0000 0.0000

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Header FIles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\opengl\glad.c">
+      <Filter>Header FIles</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="pointLight.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="basic_camera.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="curve.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="1.model_loading.fs">
+      <Filter>Shaders\ModelShader</Filter>
+    </None>
+    <None Include="1.model_loading.vs">
+      <Filter>Shaders\ModelShader</Filter>
+    </None>
+    <None Include="fragmentShaderWithTexture.fs">
+      <Filter>Shaders\TextureShader</Filter>
+    </None>
+    <None Include="vertexShaderWithTexture.vs">
+      <Filter>Shaders\TextureShader</Filter>
+    </None>
+    <None Include="fragmentShader.fs">
+      <Filter>Shaders\GenericShader</Filter>
+    </None>
+    <None Include="vertexShader.vs">
+      <Filter>Shaders\GenericShader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{fa8c43f8-932e-47d3-89c3-1933b9dbef4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header FIles">
+      <UniqueIdentifier>{a2005537-18e8-47c6-97dd-229e593b4729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{2a34f849-1d1d-4ef0-8b52-321f12f13ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\ModelShader">
+      <UniqueIdentifier>{2ce8ebf5-def1-447b-b777-96b10b6f9312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\TextureShader">
+      <UniqueIdentifier>{272a8d29-d25a-450d-9f01-d7598bfc716e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\GenericShader">
+      <UniqueIdentifier>{71ccfbdc-1c93-4b4d-9f40-5bfa86bbf0d1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
