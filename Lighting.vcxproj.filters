@@ -7,7 +7,7 @@
     <ClCompile Include="stb_image.cpp">
       <Filter>Header FIles</Filter>
     </ClCompile>
-    <ClCompile Include="..\opengl\glad.c">
+    <ClCompile Include="E:\opengl\glad.c">
       <Filter>Header FIles</Filter>
     </ClCompile>
   </ItemGroup>

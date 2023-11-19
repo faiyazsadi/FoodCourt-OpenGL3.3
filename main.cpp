@@ -40,6 +40,7 @@ void room(map<string, Cube> &Cubes, unsigned int& cubeVAO, Shader& lightingShade
 void table(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
 
@@ -203,10 +204,10 @@ int main()
     Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
     //Shader modelShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
 
-    Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
+    /*Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
     Model oven("./resources/oven/oven.obj");
     Model monitor("./resources/monitor/10120_LCD_Computer_Monitor_v01_max2011_it2.obj");
-    Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");
+    Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");*/
 
     // Generate Textures
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
@@ -466,11 +467,10 @@ int main()
         tmp = tmp * tempt;
         lightingShader.setMat4("model", tmp);
 
-        //room(Cubes, cubeVAO, lightingShader, tmp);
+        // room(Cubes, cubeVAO, lightingShader, tmp);
 
-        //cart1(cubeVAO, lightingShader, tmp);
-        
-        //rightwall(cubeVAO, lightingShader, model);
+        // cart1(cubeVAO, lightingShader, tmp);
+        cart2(cubeVAO, lightingShader, tmp);
         
         // also draw the lamp object(s)
         ourShader.use();
@@ -525,7 +525,7 @@ int main()
 
         
         // Bezeir Curve Objects
-        obj.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
+        //obj.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
 
         // Loading Models
         
@@ -1294,4 +1294,117 @@ unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum t
     }
 
     return textureID;
+}
+
+void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+    float length = 1;
+    float height = 1;
+    float width = 1;
+    // name board
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 5.0, 10));
+    model = alTogether * translate * scale;
+    Cubes["deez"].drawCubeWithTexture(lightingShader, model);
+
+    // base
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // left
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
+    translate = glm::translate(model, glm::vec3(10.0, 0.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right table top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(0, 2.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right table front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
+    translate = glm::translate(model, glm::vec3(1.4, 0.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 6.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 10));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    //// front desk
+    //model = glm::mat4(1.0f);
+    //translate = glm::mat4(1.0f);
+    //scale = glm::mat4(1.0f);
+    //scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
+    //translate = glm::translate(model, glm::vec3(0.0, 2.0, 10));
+    //model = alTogether * translate * scale;
+    //Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back table top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
+    translate = glm::translate(model, glm::vec3(0.0, 2.0, 2));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back table front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 3));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 }
