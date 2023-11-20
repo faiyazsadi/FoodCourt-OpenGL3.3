@@ -37,10 +37,14 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 void drawCube(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 model, float r, float g, float b);
 
+glm::mat4 transform(glm::mat4 alTogether, glm::vec3 scale, glm::vec3 transform, glm::vec3 rotate);
+
 void bed(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void room(map<string, Cube> &Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
-void table(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+
+void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 
@@ -65,7 +69,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(1.0f, 4.1f, 10.2f));
+Camera camera(glm::vec3(30.0f, 20.0f, 100.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -78,10 +82,10 @@ BasicCamera basic_camera(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ, V);
 
 // positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(3.50f,  5.50f,  -1.0f), /// Spot
-    glm::vec3(0.5f,  1.5f,  0.0f),   /// Point 1
-    glm::vec3(.5f,  50.5f,  0.5f), /// Sun
-    glm::vec3(2.5f,  1.5f,  0.0f) // point 2
+    glm::vec3(30.0f,  5.50f,  40.0f), /// Spot
+    glm::vec3(15.0f,  1.5f,  40.0f),   /// Point 1
+    glm::vec3(20.0f,  50.5f,  40.5f), /// Sun
+    glm::vec3(25.0f,  1.5f,  40.0f) // point 2
 };
 
 
@@ -153,6 +157,9 @@ void genTexture(std::string diffPath, std::string specPath, std::string key, flo
     Cube cube = Cube(DiffMap, SpecMap, shininess, 0.0f, 0.0f, repX, repY);
     Cubes.insert({ key, cube });
 }
+
+
+
 
 int main()
 {
@@ -435,12 +442,9 @@ int main()
 
         // pass projection matrix to shader (note that in this case it could change every frame)
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        //glm::mat4 projection = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
         lightingShader.setMat4("projection", projection);
-
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
-        //glm::mat4 view = basic_camera.createViewMatrix();
         lightingShader.setMat4("view", view);
 
         // Modelling Transformation
@@ -450,8 +454,9 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X, scale_Y, scale_Z));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .3, scale_Y *.3, scale_Z * .3));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
+
         lightingShader.setMat4("model", model);
 
 
@@ -468,10 +473,12 @@ int main()
         tempt = glm::translate(identityMatrix, glm::vec3(-6, -1, -7.5));
         //tempt = glm::translate(identityMatrix, glm::vec3(2.0, 0.0, 0.0));
         tmp = tmp * tempt;
-        lightingShader.setMat4("model", tmp);
+        
 
         // room(Cubes, cubeVAO, lightingShader, tmp);
 
+        lightingShader.setMat4("model", model);
+        food_court(cubeVAO, lightingShader, model);
         // cart1(cubeVAO, lightingShader, tmp);
         //cart2(cubeVAO, lightingShader, tmp);
 
@@ -611,120 +618,9 @@ void drawCube(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 model = g
 }
 
 
-void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
-    float length = 1;
-    float height = 1;
-    float width = 1;
-    // name board
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::mat4(1.0f);
-    glm::mat4 scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 5.0, 10));
-    model = alTogether * translate * scale;
-    Cubes["deez"].drawCubeWithTexture(lightingShader, model);
 
-    // base
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
-    // back
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // left
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // right
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
-    translate = glm::translate(model, glm::vec3(10.0, 0.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // right table top
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(8.5, 2.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // right table front
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
-    translate = glm::translate(model, glm::vec3(9.0, 0.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // top
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 6.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // front
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 10));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // front desk
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
-    translate = glm::translate(model, glm::vec3(0.0, 2.0, 10));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // back table top
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
-    translate = glm::translate(model, glm::vec3(0.0, 2.0, 2));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-
-    // back table front
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 3));
-    model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
-}
-
-void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+void chair(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
     float height = .1;
     float length = 1;
     float width = .4;
@@ -805,82 +701,7 @@ void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShad
 }
 
 
-void table(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)
-{
 
-    /*float hight = 0.04;
-    float length = 0.5;
-    float width = 0.3;
-    float supporthight = 0.5;
-    float supportwidth = 0.04;
-    float supportlength = 0.04;*/
-
-    float height = .1;
-    float length = 2;
-    float width = .7;
-    float supporthight = 1;
-    float supportwidth = .1;
-    float supportlength = 0.1;
-
-    // base
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::mat4(1.0f);
-    glm::mat4 translate2 = glm::mat4(1.0f);
-    glm::mat4 scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length, height, length));
-    translate = glm::translate(model, glm::vec3(0.0, supporthight + 4, 0.0));
-    model = alTogether * scale * translate;
-    //drawCube(cubeVAO, lightingShader, model, 0.545, 0.271, 0.075);
-    Cubes["table_surf"].drawCubeWithTexture(lightingShader, model);
-
-    //leg1
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    translate2 = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    translate2 = glm::translate(model, glm::vec3(0, 0.0, 0));
-    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
-    translate = glm::translate(model, glm::vec3(0.0, -0.5, 0.0));
-    model = alTogether * translate2 * scale * translate;
-    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
-    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
-
-    //leg2
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    translate2 = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    translate2 = glm::translate(model, glm::vec3(0, 0.0, length -.1));
-    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
-    translate = glm::translate(model, glm::vec3(0.0, -0.5, 0.0));
-    model = alTogether * translate2 * scale * translate;
-    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
-    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
-
-    //leg3
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    translate2 = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    translate2 = glm::translate(model, glm::vec3(length-supportwidth, 0.0, length-.1));
-    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
-    translate = glm::translate(model, glm::vec3(0.0, -.5, 0.0));
-    model = alTogether * translate2 * scale * translate;
-    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
-    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
-
-    //leg4
-    model = glm::mat4(1.0f);
-    translate = glm::mat4(1.0f);
-    translate2 = glm::mat4(1.0f);
-    scale = glm::mat4(1.0f);
-    translate2 = glm::translate(model, glm::vec3(length - supportwidth, 0.0, supportlength-.1));
-    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
-    translate = glm::translate(model, glm::vec3(0.0, -.5, 0.0));
-    model = alTogether * translate2 * scale * translate;
-    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
-    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
-}
 
 
 void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)
@@ -934,7 +755,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         translate = glm::translate(model, glm::vec3(0.5, 0.5, 1 + x));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-        table(Cubes, cubeVAO, lightingShader, model);
+        table(cubeVAO, lightingShader, model);
 
         //chair
         model = glm::mat4(1.0f);
@@ -942,7 +763,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         translate = glm::translate(model, glm::vec3(1, 0.5, -2.2 + x));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-        chair(Cubes, cubeVAO, lightingShader, model);
+        chair(cubeVAO, lightingShader, model);
 
         //chair
         model = glm::mat4(1.0f);
@@ -950,7 +771,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         translate = glm::translate(model, glm::vec3(2, 0.5, 6 + x));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-        chair(Cubes, cubeVAO, lightingShader, model);
+        chair(cubeVAO, lightingShader, model);
 
         x += 3.5;
     }
@@ -964,7 +785,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         scale = glm::scale(model, glm::vec3(1, 1, 2.5));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * scale * rotateYMatrix * glm::mat4(1.0f);
-        table(Cubes, cubeVAO, lightingShader, model);
+        table(cubeVAO, lightingShader, model);
 
         //chair
         model = glm::mat4(1.0f);
@@ -972,7 +793,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         translate = glm::translate(model, glm::vec3(6, 0.5, 9 + z));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-        chair(Cubes, cubeVAO, lightingShader, model);
+        chair(cubeVAO, lightingShader, model);
 
         //chair
         model = glm::mat4(1.0f);
@@ -980,7 +801,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
         translate = glm::translate(model, glm::vec3(5, 0.5, -2.2 + z));
         rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-        chair(Cubes, cubeVAO, lightingShader, model);
+        chair(cubeVAO, lightingShader, model);
 
         x = 0;
         for (int i = 0; i < 3; ++i) {
@@ -989,7 +810,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
             translate = glm::translate(model, glm::vec3(9.8, 0.5, 1.5 + x + z));
             rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-            chair(Cubes, cubeVAO, lightingShader, model);
+            chair(cubeVAO, lightingShader, model);
             x += 1.5;
         }
 
@@ -1000,7 +821,7 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
             translate = glm::translate(model, glm::vec3(1, 0.5, 2.5 + x + z));
             rotateYMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             model = alTogether * translate * rotateYMatrix * glm::mat4(1.0f);
-            chair(Cubes, cubeVAO, lightingShader, model);
+            chair(cubeVAO, lightingShader, model);
             x += 1.5;
         }
         z += 7;
@@ -1018,16 +839,16 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime * 10);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 10);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(LEFT, deltaTime * 10);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(RIGHT, deltaTime * 10);
     }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
@@ -1311,7 +1132,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     glm::mat4 translate = glm::mat4(1.0f);
     glm::mat4 scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 5.0, 10));
+    translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
     model = alTogether * translate * scale;
     Cubes["deez"].drawCubeWithTexture(lightingShader, model);
 
@@ -1320,7 +1141,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1329,7 +1150,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1338,7 +1159,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 2));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1347,7 +1168,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
-    translate = glm::translate(model, glm::vec3(10.0, 0.0, 2));
+    translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1356,7 +1177,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(0, 2.0, 2));
+    translate = glm::translate(model, glm::vec3(0, 2.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1365,7 +1186,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
-    translate = glm::translate(model, glm::vec3(1.4, 0.0, 2));
+    translate = glm::translate(model, glm::vec3(1.4, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1374,7 +1195,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(0.0, 6.0, 2));
+    translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1383,7 +1204,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 10));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1401,7 +1222,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
-    translate = glm::translate(model, glm::vec3(0.0, 2.0, 2));
+    translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1410,7 +1231,302 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 3));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+}
+
+void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+    float length = 1;
+    float height = 1;
+    float width = 1;
+    // name board
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
+    model = alTogether * translate * scale;
+    Cubes["deez"].drawCubeWithTexture(lightingShader, model);
+
+    // base
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // left
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
+    translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right table top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(8.5, 2.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right table front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
+    translate = glm::translate(model, glm::vec3(9.0, 0.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // front desk
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
+    translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back table top
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
+    translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // back table front
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+}
+
+glm::mat4 transform(glm::mat4 alTogether, glm::vec3 sc, glm::vec3 tr, glm::vec3 ro) {
+    glm::mat4 identityMatrix = glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    glm::mat4 rotate = glm::mat4(1.0f);
+    glm::mat4 rotateXMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateYMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateZMatrix = glm::mat4(1.0f);
+
+    scale = glm::scale(model, sc);
+    translate = glm::translate(model, tr);
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(ro.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(ro.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(ro.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    rotate = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+
+    model = alTogether * translate * rotate * scale;
+    return model;
+}
+
+void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+    float length = 1;
+    float height = 1;
+    float width = 1;
+
+    // base
+    glm::mat4 identityMatrix = glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    glm::mat4 rotate = glm::mat4(1.0f);
+    glm::mat4 rotateXMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateYMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateZMatrix = glm::mat4(1.0f);
+
+    scale = glm::scale(model, glm::vec3(length * 100, height * .1, width * 100));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // left wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 100));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // right wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 100));
+    translate = glm::translate(model, glm::vec3(100.0, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+
+    // back wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 100, height * 30, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 2, height * 2, width * 2));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 100.0));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y + 90), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
+    rotate = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+
+
+    for (int i = 0; i < 3; ++i) {
+        model = transform(alTogether, 
+            glm::vec3(length * 2, height * 2, width * 2),
+            glm::vec3(0.0, 0.0, 100.0 - i * 20.4), 
+            glm::vec3(0, 90, 0));
+        
+        cart2(cubeVAO, lightingShader, model);
+
+        model = transform(alTogether, 
+            glm::vec3(length * 2, height * 2, width * 2),
+            glm::vec3(100.0, 0.0, 80.0 - i * 20.4),
+            glm::vec3(0, 270, 0));
+
+        cart1(cubeVAO, lightingShader, model);
+    }
+
+    model = transform(alTogether,
+        glm::vec3(length * 10, height * 3, width * 2),
+        glm::vec3(70.0, 2.5, 80.0),
+        glm::vec3(0, 0, 0));
+    table(cubeVAO, lightingShader, model);
+}
+
+
+void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)
+{
+
+    /*float hight = 0.04;
+    float length = 0.5;
+    float width = 0.3;
+    float supporthight = 0.5;
+    float supportwidth = 0.04;
+    float supportlength = 0.04;*/
+
+    float height = .1;
+    float length = 2;
+    float width = .7;
+    float supporthight = 1;
+    float supportwidth = .1;
+    float supportlength = 0.1;
+
+    // base
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 translate2 = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length, height, length));
+    translate = glm::translate(model, glm::vec3(0.0, supporthight + 4, 0.0));
+    model = alTogether * scale * translate;
+    //drawCube(cubeVAO, lightingShader, model, 0.545, 0.271, 0.075);
+    Cubes["table_surf"].drawCubeWithTexture(lightingShader, model);
+
+    //leg1
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    translate2 = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    translate2 = glm::translate(model, glm::vec3(0, 0.0, 0));
+    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
+    translate = glm::translate(model, glm::vec3(0.0, -0.5, 0.0));
+    model = alTogether * translate2 * scale * translate;
+    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
+    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
+
+    //leg2
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    translate2 = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    translate2 = glm::translate(model, glm::vec3(0, 0.0, length - .1));
+    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
+    translate = glm::translate(model, glm::vec3(0.0, -0.5, 0.0));
+    model = alTogether * translate2 * scale * translate;
+    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
+    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
+
+    //leg3
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    translate2 = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    translate2 = glm::translate(model, glm::vec3(length - supportwidth, 0.0, length - .1));
+    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
+    translate = glm::translate(model, glm::vec3(0.0, -.5, 0.0));
+    model = alTogether * translate2 * scale * translate;
+    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
+    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
+
+    //leg4
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    translate2 = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    translate2 = glm::translate(model, glm::vec3(length - supportwidth, 0.0, supportlength - .1));
+    scale = glm::scale(model, glm::vec3(supportlength, -supporthight, supportwidth));
+    translate = glm::translate(model, glm::vec3(0.0, -.5, 0.0));
+    model = alTogether * translate2 * scale * translate;
+    //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
+    Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
 }
