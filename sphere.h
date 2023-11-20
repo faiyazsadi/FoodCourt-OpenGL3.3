@@ -19,7 +19,7 @@ using namespace std;
 const int MIN_SECTOR_COUNT = 3;
 const int MIN_STACK_COUNT = 2;
 
-class Sphere2
+class Sphere
 {
 public:
     glm::vec3 ambient;
@@ -35,12 +35,12 @@ public:
     unsigned int specularMap;
     float shininess;
 
-    Sphere2(float radius, int sectorCount, int stackCount, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, float shiny,
+    Sphere(float radius, int sectorCount, int stackCount, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, float shiny,
         unsigned int dMap, unsigned int sMap, float textureXmin, float textureYmin, float textureXmax, float textureYmax) : verticesStride(24) {
         set(radius, sectorCount, stackCount, amb, diff, spec, shiny, dMap, sMap, textureXmin, textureYmin, textureXmax, textureYmax) ;
         setUpSphereVertexDataAndConfigureVertexAttribute();
     }
-    ~Sphere2() {}
+    ~Sphere() {}
     // getters/setters
  /*   void toggleEmissive() {
         this->emissive = glm::vec3(1.0f, 0.0f, 0.0f);

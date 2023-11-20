@@ -21,6 +21,8 @@
 #include "pointLight.h"
 #include "stb_image.h"
 #include "cube.h"
+#include "sphere.h"
+#include "Cylinder.h"
 
 #include <iostream>
 #include <map>
@@ -291,7 +293,8 @@ int main()
     };
 
     Curve obj = Curve(controlPoints, defaultDiffMap1, defaultSpecMap1, 32.0f);
-
+    Sphere sphere = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
+    Cylinder cylinder = Cylinder();
     // --------------------------------------------------------------------
 
     float cube_vertices[] = {
@@ -470,13 +473,16 @@ int main()
         // room(Cubes, cubeVAO, lightingShader, tmp);
 
         // cart1(cubeVAO, lightingShader, tmp);
-        cart2(cubeVAO, lightingShader, tmp);
+        //cart2(cubeVAO, lightingShader, tmp);
+
+        //sphere.drawSphereWithTexture(lightingShader, model);
+        //cylinder.draw();
         
         // also draw the lamp object(s)
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
-
+        
 
 
         // we now draw as many light bulbs as we have point lights.

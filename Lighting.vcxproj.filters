@@ -10,6 +10,12 @@
     <ClCompile Include="E:\opengl\glad.c">
       <Filter>Header FIles</Filter>
     </ClCompile>
+    <ClCompile Include="Pyramid.cpp">
+      <Filter>Header FIles</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Header FIles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.h">
@@ -37,6 +43,15 @@
       <Filter>Header FIles</Filter>
     </ClInclude>
     <ClInclude Include="curve.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Pyramid.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>Header FIles</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
       <Filter>Header FIles</Filter>
     </ClInclude>
   </ItemGroup>
