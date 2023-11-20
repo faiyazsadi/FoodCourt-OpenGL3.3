@@ -20,13 +20,26 @@
 #define GEOMETRY_CYLINDER_H
 
 #include <vector>
+#include "shader.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 class Cylinder
 {
 public:
+
+    glm::vec3 ambient, diffuse, specular;
+    float shininess;
+    unsigned int diffuseMap, specularMap;
+
     // ctor/dtor
-    Cylinder(float baseRadius=1.0f, float topRadius=1.0f, float height=1.0f,
-             int sectorCount=36, int stackCount=1, bool smooth=true, int up=3);
+    Cylinder(float baseRadius = 1.0f, float topRadius = 1.0f, float height = 1.0f,
+        int sectorCount = 36, int stackCount = 1, bool smooth = true, int up = 3,
+        glm::vec3 amb = glm::vec3(1.0, 0.0, 0.0), glm::vec3 diff = glm::vec3(1.0, 0.0, 0.0), glm::vec3 spec = glm::vec3(1.0, 0.0, 0.0),
+        unsigned int dMap = 0, unsigned int sMap = 1, float shininess = 32
+    );
     ~Cylinder() {}
 
     // getters/setters
@@ -36,7 +49,10 @@ public:
     int getSectorCount() const              { return sectorCount; }
     int getStackCount() const               { return stackCount; }
     void set(float baseRadius, float topRadius, float height,
-             int sectorCount, int stackCount, bool smooth=true, int up=3);
+             int sectorCount, int stackCount, bool smooth=true, int up=3,
+        glm::vec3 amb = glm::vec3(1.0, 0.0, 0.0), glm::vec3 diff = glm::vec3(1.0, 0.0, 0.0), glm::vec3 spec = glm::vec3(1.0, 0.0, 0.0),
+        unsigned int dMap = 0, unsigned int sMap = 1, float shininess = 32
+    );
     void setBaseRadius(float radius);
     void setTopRadius(float radius);
     void setHeight(float radius);
@@ -78,7 +94,7 @@ public:
     unsigned int getSideStartIndex() const  { return 0; }   // side starts from the begining
 
     // draw in VertexArray mode
-    void draw() const;          // draw all
+    void draw(Shader& lightingShader, glm::mat4 model) const;          // draw all
     void drawBase() const;      // draw base cap only
     void drawTop() const;       // draw top cap only
     void drawSide() const;      // draw side only

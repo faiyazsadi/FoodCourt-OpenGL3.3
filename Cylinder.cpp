@@ -35,6 +35,10 @@
 #include <cmath>
 #include "Cylinder.h"
 
+#include "shader.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 
@@ -49,9 +53,10 @@ const int MIN_STACK_COUNT  = 1;
 // ctor
 ///////////////////////////////////////////////////////////////////////////////
 Cylinder::Cylinder(float baseRadius, float topRadius, float height, int sectors,
-                   int stacks, bool smooth, int up) : interleavedStride(32)
+             int stacks, bool smooth, int up, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec,
+             unsigned int dMap, unsigned int sMap, float shininess) : interleavedStride(32)
 {
-    set(baseRadius, topRadius, height, sectors, stacks, smooth, up);
+    set(baseRadius, topRadius, height, sectors, stacks, smooth, up, amb, diff, spec, dMap, sMap, shininess);
 }
 
 
@@ -60,8 +65,17 @@ Cylinder::Cylinder(float baseRadius, float topRadius, float height, int sectors,
 // setters
 ///////////////////////////////////////////////////////////////////////////////
 void Cylinder::set(float baseRadius, float topRadius, float height, int sectors,
-                   int stacks, bool smooth, int up)
+                   int stacks, bool smooth, int up, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec,
+        unsigned int dMap, unsigned int sMap, float shininess)
 {
+    
+    this->ambient = amb;
+    this->diffuse = diff;
+    this->specular = spec;
+    this->diffuseMap = dMap;
+    this->specularMap = sMap;
+    this->shininess = shininess;
+
     if(baseRadius > 0)
         this->baseRadius = baseRadius;
     if(topRadius > 0)
@@ -167,7 +181,7 @@ void Cylinder::printSelf() const
 // draw a cylinder in VertexArray mode
 // OpenGL RC must be set before calling it
 ///////////////////////////////////////////////////////////////////////////////
-void Cylinder::draw() const
+void Cylinder::draw(Shader& lightingShader, glm::mat4 model) const
 {
     // interleaved array
     /*glEnableClientState(GL_VERTEX_ARRAY);
@@ -183,6 +197,19 @@ void Cylinder::draw() const
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);*/
 
+    lightingShader.use();
+    lightingShader.setVec3("material.ambient", this->ambient);
+    lightingShader.setVec3("material.diffuse", this->diffuse);
+    lightingShader.setVec3("material.specular", this->specular);
+    lightingShader.setFloat("material.shininess", this->shininess);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->diffuseMap);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, this->specularMap);
+
+    lightingShader.setMat4("model", model);
 
     GLuint vaoId;
     glGenVertexArrays(1, &vaoId);
@@ -385,7 +412,7 @@ void Cylinder::drawWithLines(const float lineColor[4]) const
 {
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1.0, 1.0f); // move polygon backward
-    this->draw();
+    //this->draw();
     glDisable(GL_POLYGON_OFFSET_FILL);
 
     // draw lines with VA

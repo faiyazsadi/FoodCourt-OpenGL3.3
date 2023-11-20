@@ -305,7 +305,9 @@ int main()
     //Cylinder cylinder = Cylinder(10, 5, 10, 36, 8, true, 3, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
     // --------------------------------------------------------------------
 
-    Cylinder cylinder = Cylinder(5, 5, 10, 36, 1, true, 3);
+    Cylinder cylinder = Cylinder(10, 10, 10, 36, 1, false, 3,
+        glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0),
+        defaultDiffMap1, defaultSpecMap1, 32);
 
     float cube_vertices[] = {
         // positions      // normals
@@ -480,7 +482,7 @@ int main()
         ourShader.setMat4("model", model);
         ourShader.setVec3("color", glm::vec3(1.0, 0.0, 0.0));
 
-        cylinder.draw();
+        cylinder.draw(lightingShader, model);
 
         glBindVertexArray(lightCubeVAO);
         //glBindVertexArray(shpareVAO);
