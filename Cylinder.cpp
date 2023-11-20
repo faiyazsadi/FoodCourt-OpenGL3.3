@@ -16,21 +16,26 @@
 // UPDATED: 2023-03-12
 ///////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #ifdef _WIN32
 #include <windows.h>    // include windows.h to avoid thousands of compile errors even though this class is not depending on Windows
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+
+#include <glad/glad.h>
+
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+
+
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 #include "Cylinder.h"
+
+
 
 
 
@@ -165,7 +170,7 @@ void Cylinder::printSelf() const
 void Cylinder::draw() const
 {
     // interleaved array
-    glEnableClientState(GL_VERTEX_ARRAY);
+    /*glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, interleavedStride, &interleavedVertices[0]);
@@ -176,7 +181,58 @@ void Cylinder::draw() const
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);*/
+
+
+    GLuint vaoId;
+    glGenVertexArrays(1, &vaoId);
+    glBindVertexArray(vaoId);
+
+    // create VBO to copy interleaved vertex data (V/N/T) to VBO
+    GLuint vboId;
+    glGenBuffers(1, &vboId);
+    glBindBuffer(GL_ARRAY_BUFFER, vboId);             // for vertex data
+    glBufferData(GL_ARRAY_BUFFER,                     // target
+        this->getInterleavedVertexSize(), // data size, # of bytes
+        this->getInterleavedVertices(),   // ptr to vertex data
+        GL_STATIC_DRAW);                     // usage
+
+    // copy index data to VBO
+    GLuint iboId;
+    glGenBuffers(1, &iboId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);     // for index data
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,             // target
+        this->getIndexSize(),             // data size, # of bytes
+        this->getIndices(),               // ptr to index data
+        GL_STATIC_DRAW);                     // usage
+
+    // activate vertex array attributes
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+
+    // set vertex array attributes with stride and offset
+    int stride = this->getInterleavedStride();     // should be 32 bytes
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, stride, (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, stride, (void*)(sizeof(float) * 3));
+    glVertexAttribPointer(2, 2, GL_FLOAT, false, stride, (void*)(sizeof(float) * 6));
+
+    // unbind VAO and VBOs
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
+    // draw a cylinder with VBO
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLES,                    // primitive type
+        this->getIndexCount(),        // # of indices
+        GL_UNSIGNED_INT,                 // data type
+        (void*)0);                       // offset to indices
+
+    // unbind VAO
+    glBindVertexArray(0);
+
 }
 
 
@@ -187,7 +243,7 @@ void Cylinder::draw() const
 void Cylinder::drawSide() const
 {
     // interleaved array
-    glEnableClientState(GL_VERTEX_ARRAY);
+    /*glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, interleavedStride, &interleavedVertices[0]);
@@ -198,7 +254,7 @@ void Cylinder::drawSide() const
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);*/
 }
 
 
@@ -209,7 +265,7 @@ void Cylinder::drawSide() const
 void Cylinder::drawBase() const
 {
     // interleaved array
-    glEnableClientState(GL_VERTEX_ARRAY);
+    /*glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, interleavedStride, &interleavedVertices[0]);
@@ -221,13 +277,65 @@ void Cylinder::drawBase() const
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);*/
+
+
+    unsigned int indexCount = ((unsigned int)indices.size() - baseIndex) / 2;
+
+    GLuint vaoId;
+    glGenVertexArrays(1, &vaoId);
+    glBindVertexArray(vaoId);
+
+    // create VBO to copy interleaved vertex data (V/N/T) to VBO
+    GLuint vboId;
+    glGenBuffers(1, &vboId);
+    glBindBuffer(GL_ARRAY_BUFFER, vboId);             // for vertex data
+    glBufferData(GL_ARRAY_BUFFER,                     // target
+        this->getInterleavedVertexSize(), // data size, # of bytes
+        this->getInterleavedVertices(),   // ptr to vertex data
+        GL_STATIC_DRAW);                     // usage
+
+    // copy index data to VBO
+    GLuint iboId;
+    glGenBuffers(1, &iboId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);     // for index data
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,             // target
+        this->getIndexSize(),             // data size, # of bytes
+        this->getIndices(),               // ptr to index data
+        GL_STATIC_DRAW);                     // usage
+
+    // activate vertex array attributes
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+
+    // set vertex array attributes with stride and offset
+    int stride = this->getInterleavedStride();     // should be 32 bytes
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, stride, (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, stride, (void*)12);
+    glVertexAttribPointer(2, 2, GL_FLOAT, false, stride, (void*)24);
+
+    // unbind VAO and VBOs
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
+    // draw a cylinder with VBO
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLE_STRIP,                    // primitive type
+        indexCount,        // # of indices
+        GL_UNSIGNED_INT,                 // data type
+        &indices[baseIndex]);                       // offset to indices
+
+    // unbind VAO
+    glBindVertexArray(0);
 }
 
 void Cylinder::drawTop() const
 {
     // interleaved array
-    glEnableClientState(GL_VERTEX_ARRAY);
+    /*glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, interleavedStride, &interleavedVertices[0]);
@@ -239,7 +347,7 @@ void Cylinder::drawTop() const
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);*/
 }
 
 
@@ -251,20 +359,20 @@ void Cylinder::drawTop() const
 void Cylinder::drawLines(const float lineColor[4]) const
 {
     // set line colour
-    glColor4fv(lineColor);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,   lineColor);
+    //glColor4fv(lineColor);
+    //glMaterialfv(GL_FRONT, GL_DIFFUSE,   lineColor);
 
-    // draw lines with VA
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+    //// draw lines with VA
+    //glDisable(GL_LIGHTING);
+    //glDisable(GL_TEXTURE_2D);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-    glDrawElements(GL_LINES, (unsigned int)lineIndices.size(), GL_UNSIGNED_INT, lineIndices.data());
+    //glDrawElements(GL_LINES, (unsigned int)lineIndices.size(), GL_UNSIGNED_INT, lineIndices.data());
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_TEXTURE_2D);
+    //glDisableClientState(GL_VERTEX_ARRAY);
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_TEXTURE_2D);
 }
 
 

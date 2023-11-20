@@ -12,7 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 #include "shader.h"
 #include "camera.h"
 #include "curve.h"
@@ -23,6 +22,7 @@
 #include "cube.h"
 #include "sphere.h"
 #include "Cylinder.h"
+//#include "cylinder2.h"
 
 #include <iostream>
 #include <map>
@@ -299,10 +299,13 @@ int main()
         -0.9600, 0.3300, 5.1000,
     };
 
+    //Cylinder cylinder = Cylinder(5, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
     Curve obj = Curve(controlPoints, defaultDiffMap1, defaultSpecMap1, 32.0f);
     Sphere sphere = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
-    Cylinder cylinder = Cylinder();
+    //Cylinder cylinder = Cylinder(10, 5, 10, 36, 8, true, 3, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
     // --------------------------------------------------------------------
+
+    Cylinder cylinder = Cylinder(5, 5, 10, 36, 1, true, 3);
 
     float cube_vertices[] = {
         // positions      // normals
@@ -458,41 +461,26 @@ int main()
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
-
-
-        /*glm::mat4 modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(model, glm::vec3(-0.45f, 3.0f, -2.8f));
-        back_wall.drawCubeWithTexture(lightingShader, modelMatrixForContainer);*/
-
-        //glBindVertexArray(cubeVAO);
-        //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-
-        //bed(cubeVAO, lightingShader, model,0);
-        glm::mat4 tmp = model, tempt;
-        tempt = glm::translate(identityMatrix, glm::vec3(-6, -1, -7.5));
-        //tempt = glm::translate(identityMatrix, glm::vec3(2.0, 0.0, 0.0));
-        tmp = tmp * tempt;
-        
-
+      
         // room(Cubes, cubeVAO, lightingShader, tmp);
-
         lightingShader.setMat4("model", model);
-        food_court(cubeVAO, lightingShader, model);
+        //food_court(cubeVAO, lightingShader, model);
         // cart1(cubeVAO, lightingShader, tmp);
         //cart2(cubeVAO, lightingShader, tmp);
 
         //sphere.drawSphereWithTexture(lightingShader, model);
-        //cylinder.draw();
+        
+        
+        glm::mat4 tempt = glm::mat4(1.0f);
         
         // also draw the lamp object(s)
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
-        
+        ourShader.setMat4("model", model);
+        ourShader.setVec3("color", glm::vec3(1.0, 0.0, 0.0));
 
-
-        // we now draw as many light bulbs as we have point lights.
+        cylinder.draw();
 
         glBindVertexArray(lightCubeVAO);
         //glBindVertexArray(shpareVAO);
