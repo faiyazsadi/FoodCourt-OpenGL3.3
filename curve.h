@@ -33,6 +33,7 @@ public:
     unsigned int diffuseMap;
     unsigned int specularMap;
     float shininess;
+    Curve() {}
     Curve(vector<float>& controlPoints, unsigned int dMap, unsigned int sMap, float shiny)
         : diffuseMap(dMap), specularMap(sMap), shininess(shiny)
     {

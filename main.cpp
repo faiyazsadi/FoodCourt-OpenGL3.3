@@ -33,6 +33,144 @@ std::map<string, Cube> Cubes;
 std::map<string, Cylinder> Cylinders;
 std::map<string, Model> Models;
 
+unsigned int diffMap1, diffMap2, diffMap3, diffMap4, diffMap5, diffMap6;
+unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
+
+
+vector<float>glassp{
+    0.0900, 1.8350, 5.1000,
+0.0050, 1.8350, 5.1000,
+-0.0850, 1.8400, 5.1000,
+-0.1650, 1.8300, 5.1000,
+-0.2950, 1.8300, 5.1000,
+-0.3700, 1.8300, 5.1000,
+-0.5400, 1.8350, 5.1000,
+-0.4750, 1.7750, 5.1000,
+-0.4100, 1.7350, 5.1000,
+-0.3550, 1.6950, 5.1000,
+-0.3300, 1.6100, 5.1000,
+-0.3150, 1.5150, 5.1000,
+-0.3200, 1.4400, 5.1000,
+-0.3250, 1.3450, 5.1000,
+-0.3900, 1.2200, 5.1000,
+-0.4400, 1.0550, 5.1000,
+-0.5300, 0.9800, 5.1000,
+-0.5800, 0.8300, 5.1000,
+-0.5750, 0.7000, 5.1000,
+-0.6000, 0.6200, 5.1000,
+-0.6000, 0.5500, 5.1000,
+-0.5950, 0.4350, 5.1000,
+-0.5650, 0.3050, 5.1000,
+-0.5450, 0.2300, 5.1000,
+-0.5300, 0.0300, 5.1000,
+-0.5350, 0.1200, 5.1000,
+};
+
+vector<float> controlPoints =
+{
+    0.1300, 2.0200, 5.1000,
+    -0.3600, 2.0250, 5.1000,
+    -0.7350, 1.8650, 5.1000,
+    -0.8300, 1.5400, 5.1000,
+    -0.6350, 1.2200, 5.1000,
+    -0.5250, 0.9850, 5.1000,
+    -0.4950, 0.6400, 5.1000,
+    -0.6550, 0.4600, 5.1000,
+    -0.9600, 0.3300, 5.1000
+};
+
+vector<float> ctrlBowl1 =
+{
+    0.2350, 1.8650, 5.1000,
+    0.0800, 1.8850, 5.1000,
+    -0.1300, 1.9000, 5.1000,
+    -0.3100, 1.8450, 5.1000,
+    -0.4000, 1.7000, 5.1000
+};
+
+vector<float> ctrlVase = {
+0.0550, 2.0150, 5.1000,
+-0.0700, 2.0250, 5.1000,
+-0.2750, 2.0300, 5.1000,
+-0.4150, 1.9400, 5.1000,
+-0.4250, 1.7900, 5.1000,
+-0.3300, 1.5950, 5.1000,
+-0.2450, 1.4450, 5.1000,
+-0.2150, 1.3100, 5.1000,
+-0.2150, 1.1900, 5.1000,
+-0.2050, 1.0800, 5.1000,
+-0.2100, 0.9350, 5.1000,
+-0.2300, 0.7800, 5.1000,
+-0.2850, 0.6750, 5.1000
+};
+
+vector<float> ctrlBowl2 = {
+    0.2450, 2.0050, 5.1000,
+    0.1200, 2.0050, 5.1000,
+    0.0200, 2.0100, 5.1000,
+    -0.1300, 2.0300, 5.1000,
+    -0.2800, 2.0150, 5.1000,
+    -0.3850, 2.0150, 5.1000,
+    -0.3900, 1.9200, 5.1000,
+    -0.3900, 1.7700, 5.1000,
+    -0.3800, 1.6050, 5.1000
+};
+vector<float> ctrlPlate = {
+    -0.2500, 1.7000, 5.1000,
+    -0.5150, 1.5950, 5.1000,
+    -0.5750, 1.3700, 5.1000,
+    -0.4050, 1.2300, 5.1000,
+    -0.2250, 1.1850, 5.1000
+};
+
+vector<float> ctrlFlatPlate = {
+    -0.2500, 1.7000, 5.1000,
+    -0.5150, 1.5950, 5.1000,
+    -0.5750, 1.3700, 5.1000,
+    -0.4050, 1.2300, 5.1000,
+    -0.2250, 1.1850, 5.1000
+};
+
+vector<float> ctrlDecor1 = {
+    -0.1500, 1.9050, 5.1000,
+    -0.3650, 1.8500, 5.1000,
+    -0.4700, 1.7200, 5.1000,
+    -0.5250, 1.5600, 5.1000,
+    -0.4650, 1.4050, 5.1000,
+    -0.3400, 1.3100, 5.1000,
+    -0.1900, 1.2950, 5.1000
+};
+
+vector<float> ctrlDecor2 = {
+    -0.0700, 2.0750, 5.1000,
+    -0.0950, 1.9600, 5.1000,
+    -0.1250, 1.8100, 5.1000,
+    -0.2000, 1.6300, 5.1000,
+    -0.2300, 1.4650, 5.1000,
+    -0.2050, 1.2600, 5.1000,
+    -0.1550, 1.1200, 5.1000,
+    -0.0950, 0.8800, 5.1000
+};
+vector<float> ctrlDecor3 = {
+
+    -0.1900, 2.0200, 5.1000,
+    -0.5100, 2.0050, 5.1000,
+    -0.7400, 1.8500, 5.1000,
+    -0.7750, 1.5200, 5.1000,
+    -0.6850, 1.2250, 5.1000,
+    -0.4800, 1.0650, 5.1000,
+    -0.2800, 1.0100, 5.1000
+};
+
+//Curve decor1(ctrlDecor1, diffMap1, diffMap1, 1.0f);
+//Curve decor2(ctrlDecor2, diffMap1, diffMap1, 1.0f);
+//Curve decor3(ctrlDecor3, diffMap1, diffMap1, 1.0f);
+//Curve aa(ctrlPlate, diffMap1, diffMap1, 1);
+//Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+//Curve bowl2(ctrlBowl2, diffMap1, diffMap1, 1.0f);
+//Curve vase(ctrlVase, diffMap1, diffMap1, 1.0f);
+//Curve plate(ctrlPlate, diffMap1, diffMap1, 1.0f);
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -75,7 +213,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
+Camera camera(glm::vec3(0.0f, 2.0f, 5.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -183,6 +321,7 @@ void genTextureCylinder(float baseR = 1, float topR = 1, std::string diffPath = 
 void drawModel(Model& model, glm::mat4 alTogether);
 
 
+
 int main()
 {
     // glfw: initialize and configure
@@ -287,8 +426,8 @@ int main()
     string diffuseMapPath1 = "back_wall.jpg";
     string specularMapPath1 = "back_wall.jpg";
 
-    unsigned int diffMap1 = loadTexture(diffuseMapPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap1 = loadTexture(specularMapPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap1 = loadTexture(diffuseMapPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap1 = loadTexture(specularMapPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube back_wall = Cube(diffMap1, specMap1, 32.0f, 0.0f, 0.0f, 10.0f, 10.0f);
     Cubes.insert({ "back_wall", back_wall });
 
@@ -296,16 +435,16 @@ int main()
     string diffuseMapPath2 = "back_wall.jpg";
     string specularMapPath2 = "back_wall.jpg";
 
-    unsigned int diffMap2 = loadTexture(diffuseMapPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap2 = loadTexture(specularMapPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap2 = loadTexture(diffuseMapPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap2 = loadTexture(specularMapPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube left_wall = Cube(diffMap2, specMap2, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["left_wall"] = left_wall;
     // -------------------------------------------------------
     string diffuseMapPath3 = "table_surf.jpg";
     string specularMapPath3 = "table_surf.jpg";
 
-    unsigned int diffMap3 = loadTexture(diffuseMapPath3.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap3 = loadTexture(specularMapPath3.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap3 = loadTexture(diffuseMapPath3.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap3 = loadTexture(specularMapPath3.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube table_surf = Cube(diffMap3, specMap3, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["table_surf"] = table_surf;
 
@@ -313,8 +452,8 @@ int main()
     string diffuseMapPath4 = "table_leg.jpg";
     string specularMapPath4 = "table_leg.jpg";
 
-    unsigned int diffMap4 = loadTexture(diffuseMapPath4.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap4 = loadTexture(specularMapPath4.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap4 = loadTexture(diffuseMapPath4.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap4 = loadTexture(specularMapPath4.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube table_leg = Cube(diffMap3, specMap3, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["table_leg"] = table_leg;
 
@@ -322,8 +461,8 @@ int main()
     string diffuseMapPath5 = "chair_surf.jpg";
     string specularMapPath5 = "chair_surf.jpg";
 
-    unsigned int diffMap5 = loadTexture(diffuseMapPath5.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap5 = loadTexture(specularMapPath5.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap5 = loadTexture(diffuseMapPath5.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap5 = loadTexture(specularMapPath5.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube chair_surf = Cube(diffMap5, specMap5, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["chair_surf"] = chair_surf;
 
@@ -331,12 +470,15 @@ int main()
     string diffuseMapPath6 = "chair_leg.jpg";
     string specularMapPath6 = "chair_leg.jpg";
 
-    unsigned int diffMap6 = loadTexture(diffuseMapPath6.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    unsigned int specMap6 = loadTexture(specularMapPath6.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    diffMap6 = loadTexture(diffuseMapPath6.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    specMap6 = loadTexture(specularMapPath6.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube chair_leg = Cube(diffMap6, specMap6, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["chair_leg"] = chair_leg;
 
-
+    unsigned int a = loadTexture("table_surf.jpeg", GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    unsigned int specMap7 = loadTexture(specularMapPath6.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //Cube chair_leg = Cube(a, a, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+   // Cubes["chair_leg"] = chair_leg;
     // Cylinders
 
     /*Cylinder table_top = Cylinder(10, 10, 10, 36, 1, false, 3,
@@ -348,107 +490,14 @@ int main()
     // ------------------------------------------------------------------
    
     // Bezeir Object Control Points
-    vector<float> controlPoints =
-    {
-        0.1300, 2.0200, 5.1000,
-        -0.3600, 2.0250, 5.1000,
-        -0.7350, 1.8650, 5.1000,
-        -0.8300, 1.5400, 5.1000,
-        -0.6350, 1.2200, 5.1000,
-        -0.5250, 0.9850, 5.1000,
-        -0.4950, 0.6400, 5.1000,
-        -0.6550, 0.4600, 5.1000,
-        -0.9600, 0.3300, 5.1000,
-    };
-
-    vector<float> ctrlBowl1 =
-    {
-        0.2350, 1.8650, 5.1000,
-        0.0800, 1.8850, 5.1000,
-        -0.1300, 1.9000, 5.1000,
-        -0.3100, 1.8450, 5.1000,
-        -0.4000, 1.7000, 5.1000
-    };
-
-    vector<float> ctrlVase = {
-    0.0550, 2.0150, 5.1000,
-    -0.0700, 2.0250, 5.1000,
-    -0.2750, 2.0300, 5.1000,
-    -0.4150, 1.9400, 5.1000,
-    -0.4250, 1.7900, 5.1000,
-    -0.3300, 1.5950, 5.1000,
-    -0.2450, 1.4450, 5.1000,
-    -0.2150, 1.3100, 5.1000,
-    -0.2150, 1.1900, 5.1000,
-    -0.2050, 1.0800, 5.1000,
-    -0.2100, 0.9350, 5.1000,
-    -0.2300, 0.7800, 5.1000,
-    -0.2850, 0.6750, 5.1000
-    };
-
-    vector<float> ctrlBowl2 = {
-        0.2450, 2.0050, 5.1000,
-        0.1200, 2.0050, 5.1000,
-        0.0200, 2.0100, 5.1000,
-        -0.1300, 2.0300, 5.1000,
-        -0.2800, 2.0150, 5.1000,
-        -0.3850, 2.0150, 5.1000,
-        -0.3900, 1.9200, 5.1000,
-        -0.3900, 1.7700, 5.1000,
-        -0.3800, 1.6050, 5.1000,
-    };
-    vector<float> ctrlPlate = {
-
-        0.1000, 1.8600, 5.1000,
-        -0.0200, 1.8700, 5.1000,
-        -0.2050, 1.8700, 5.1000,
-        -0.4100, 1.8500, 5.1000,
-        -0.5000, 1.8250, 5.1000,
-        -0.6100, 1.8000, 5.1000,
-
-    };
-    vector<float> ctrlDecor1 = {
-        -0.1500, 1.9050, 5.1000,
-        -0.3650, 1.8500, 5.1000,
-        -0.4700, 1.7200, 5.1000,
-        -0.5250, 1.5600, 5.1000,
-        -0.4650, 1.4050, 5.1000,
-        -0.3400, 1.3100, 5.1000,
-        -0.1900, 1.2950, 5.1000,
-    };
     
-    vector<float> ctrlDecor2 = {
-        -0.0700, 2.0750, 5.1000,
-        -0.0950, 1.9600, 5.1000,
-        -0.1250, 1.8100, 5.1000,
-        -0.2000, 1.6300, 5.1000,
-        -0.2300, 1.4650, 5.1000,
-        -0.2050, 1.2600, 5.1000,
-        -0.1550, 1.1200, 5.1000,
-        -0.0950, 0.8800, 5.1000,
-    };
-    vector<float> ctrlDecor3 = {
-        -0.1350, 1.6300, 5.1000,
-        -0.3850, 1.5200, 5.1000,
-        -0.5150, 1.3250, 5.1000,
-        -0.3800, 1.1300, 5.1000,
-        -0.1650, 1.0900, 5.1000,
-    };
-
-    Curve decor1 = Curve(ctrlDecor1, defaultDiffMap1, defaultSpecMap1, 32.0f);
-    Curve decor2 = Curve(ctrlDecor2, defaultDiffMap1, defaultSpecMap1, 32.0f);
-    Curve decor3 = Curve(ctrlDecor3, defaultDiffMap1, defaultSpecMap1, 32.0f);
 
 
-    Curve bowl1 = Curve(ctrlBowl1, defaultDiffMap1, defaultSpecMap1, 32.0f);
-    Curve bowl2 = Curve(ctrlBowl2, defaultDiffMap1, defaultSpecMap1, 32.0f);
-    Curve vase = Curve(ctrlVase, defaultDiffMap1, defaultSpecMap1, 32.0f);
-    Curve plate= Curve(ctrlPlate, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    
 
-
-    Curve obj = Curve(controlPoints, defaultDiffMap1, defaultSpecMap1, 32.0f);
     Sphere sphere = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
     
+
 
     float cube_vertices[] = {
         // positions      // normals
@@ -563,13 +612,16 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(0x00004000 | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 model = transform(glm::mat4(1.0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+        /*decor1.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));*/
+
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
         modelShader.use();
         modelShader.setMat4("projection", projection);
         modelShader.setMat4("view", view);
-        glm::mat4 model;
+        
         for (int i = 0; i < 4; ++i) {
             model = transform(glm::mat4(1.0f),
                 glm::vec3(.015, .015, .015),
@@ -628,9 +680,9 @@ int main()
         lightingShader.setMat4("model", model);
         //decoration(lightingShader, modelShader, model);
         // room(Cubes, cubeVAO, lightingShader, tmp);
-        food_court(cubeVAO, lightingShader, modelShader, model);
+        //food_court(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, tmp);
-        //cart2(cubeVAO, lightingShader, model);
+        cart2(cubeVAO, lightingShader, model);
         //sphere.drawSphereWithTexture(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
@@ -689,7 +741,9 @@ int main()
         
         // Bezeir Curve Objects
         //obj.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
-        //bowl.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
+
+        
+
 
         // Loading Models
         
@@ -982,16 +1036,16 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.ProcessKeyboard(FORWARD, deltaTime * 10);
+        camera.ProcessKeyboard(FORWARD, deltaTime * 2);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.ProcessKeyboard(BACKWARD, deltaTime * 10);
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 2);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.ProcessKeyboard(LEFT, deltaTime * 10);
+        camera.ProcessKeyboard(LEFT, deltaTime * 2);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.ProcessKeyboard(RIGHT, deltaTime * 10);
+        camera.ProcessKeyboard(RIGHT, deltaTime * 2);
     }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
@@ -1000,11 +1054,11 @@ void processInput(GLFWwindow* window)
         else if (rotateAxis_Y) rotateAngle_Y -= 0.1;
         else rotateAngle_Z -= 0.1;
     }
-    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) translate_Y += 0.001;
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) translate_Y -= 0.001;
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) translate_X += 0.001;
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) translate_X -= 0.001;
-    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) translate_Z += 0.001;
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) translate_Y += 0.01;
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) translate_Y -= 0.01;
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) translate_X += 0.01;
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) translate_X -= 0.01;
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) translate_Z += 0.01;
     //if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) translate_Z -= 0.001;
     ////if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) scale_X += 0.001;
     //if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) scale_X -= 0.001;
@@ -1315,21 +1369,92 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
     
+    // curve objects for right bottom shelf
+    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.75, 7), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
+    Curve plate(ctrlPlate, diffMap1, diffMap1, 1.0f);
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7, 5.1, 6.4), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7, 5.2, 6.4), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7, 5.3, 6.4), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+
+    Curve vase(ctrlVase, diffMap1, diffMap1, 1.0f);
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 4.4, 5.8), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 4.4, 5.4), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 4.4, 5.0), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+
+
+    model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 4.5), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 4.1), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+
+    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
+    glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
+    model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
+    glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
+    model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.4), glm::vec3(180, 0, 0));
+    glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
+    model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.0), glm::vec3(180, 0, 0));
+    glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
+    model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 1.6), glm::vec3(180, 0, 0));
+    glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
+
+    // for right top shelf
+    // bowls
+    float x = 0;
+    float y = 1;
+    float z = -.4;
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1 + y, 1.4 + z), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1 + y, 1.8 + z), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1 + y, 2.2 + z), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+
+    // bowls
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1+ y, 3), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1 + y, 3.5), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.8, .8, .5), glm::vec3(9.7 + x, 5.1 + y, 4), glm::vec3(180, 0, 0));
+    bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+
+    // vase
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 5.4, 5.5), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 5.4, 6), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
+    model = transform(alTogether, glm::vec3(.6, .4, .6), glm::vec3(9.6, 5.4, 6.5), glm::vec3(180, 0, 0));
+    vase.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
     //right top shelf
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .6, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(9.5, 4.5, 0));
+    scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(9.2, 4.5, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
     //right bottom shelf
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .6, height * .1, width * 8));
-    translate = glm::translate(model, glm::vec3(9.5, 3.5, 0));
+    scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(9.2, 3.5, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
