@@ -30,6 +30,7 @@
 using namespace std;
 
 std::map<string, Cube> Cubes;
+std::map<string, Cylinder> Cylinders;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -47,6 +48,9 @@ void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShad
 void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void round_table(Shader& lightingShader, glm::mat4 alTogether);
+void round_chair(Shader& lightingShader, glm::mat4 alTogether);
+void round_table_chair(Shader& lightingShader, glm::mat4 alTogether);
 
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
 
@@ -158,7 +162,17 @@ void genTexture(std::string diffPath, std::string specPath, std::string key, flo
     Cubes.insert({ key, cube });
 }
 
+void genTextureCylinder(float baseR = 1, float topR = 1, std::string diffPath = "", std::string specPath = "", std::string key = "", float shininess = 32, float repX = 0, float repY = 0
+    
+) {
+    unsigned int DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    unsigned int SpecMap = loadTexture(specPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cylinder table_top = Cylinder(baseR, topR, 1, 36, 1, false, 3,
+        glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0),
+        DiffMap, SpecMap, shininess);
 
+    Cylinders.insert({ key, table_top });
+}
 
 
 int main()
@@ -220,6 +234,9 @@ int main()
 
     // Generate Textures
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
+    genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
+    genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
+    genTextureCylinder(1, .5, "default_texture.png", "default_texture.png", "table_bottom", 32, 0, 0);
 
     string defaultDiffPath1 = "default_texture.png";
     string defaultSpecPath1 = "default_texture.png";
@@ -282,6 +299,14 @@ int main()
     Cube chair_leg = Cube(diffMap6, specMap6, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Cubes["chair_leg"] = chair_leg;
 
+
+    // Cylinders
+
+    /*Cylinder table_top = Cylinder(10, 10, 10, 36, 1, false, 3,
+        glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0),
+        defaultDiffMap1, defaultSpecMap1, 32);
+    Cylinders["table_top"] = table_top;*/
+
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
    
@@ -299,15 +324,10 @@ int main()
         -0.9600, 0.3300, 5.1000,
     };
 
-    //Cylinder cylinder = Cylinder(5, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
+    
     Curve obj = Curve(controlPoints, defaultDiffMap1, defaultSpecMap1, 32.0f);
     Sphere sphere = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
-    //Cylinder cylinder = Cylinder(10, 5, 10, 36, 8, true, 3, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
-    // --------------------------------------------------------------------
-
-    Cylinder cylinder = Cylinder(10, 10, 10, 36, 1, false, 3,
-        glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0),
-        defaultDiffMap1, defaultSpecMap1, 32);
+    
 
     float cube_vertices[] = {
         // positions      // normals
@@ -465,13 +485,12 @@ int main()
         lightingShader.setMat4("model", model);
       
         // room(Cubes, cubeVAO, lightingShader, tmp);
-        lightingShader.setMat4("model", model);
-        //food_court(cubeVAO, lightingShader, model);
-        // cart1(cubeVAO, lightingShader, tmp);
+        food_court(cubeVAO, lightingShader, model);
+        //cart1(cubeVAO, lightingShader, tmp);
         //cart2(cubeVAO, lightingShader, tmp);
-
         //sphere.drawSphereWithTexture(lightingShader, model);
-        
+
+        round_table_chair(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
         
@@ -482,7 +501,7 @@ int main()
         ourShader.setMat4("model", model);
         ourShader.setVec3("color", glm::vec3(1.0, 0.0, 0.0));
 
-        cylinder.draw(lightingShader, model);
+        
 
         glBindVertexArray(lightCubeVAO);
         //glBindVertexArray(shpareVAO);
@@ -1437,10 +1456,25 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     }
 
     model = transform(alTogether,
-        glm::vec3(length * 10, height * 3, width * 2),
-        glm::vec3(70.0, 2.5, 80.0),
+        glm::vec3(1, 1, 1),
+        glm::vec3(40.0, 7.1, 100.0),
         glm::vec3(0, 0, 0));
-    table(cubeVAO, lightingShader, model);
+    for (int i = 0; i < 4; ++i) {
+        model = transform(alTogether,
+            glm::vec3(.8, .8, .8),
+            glm::vec3(30.0, 7.1, 90.0 - i * 20),
+            glm::vec3(0, 0, 0));
+        round_table_chair(lightingShader, model);
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        model = transform(alTogether,
+            glm::vec3(.8, .8, .8),
+            glm::vec3(70.0, 7.1, 90.0 - i * 20),
+            glm::vec3(0, 0, 0));
+        round_table_chair(lightingShader, model);
+    }
+    
 }
 
 
@@ -1519,4 +1553,29 @@ void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)
     model = alTogether * translate2 * scale * translate;
     //drawCube(cubeVAO, lightingShader, model, 0.804, 0.361, 0.361);
     Cubes["table_leg"].drawCubeWithTexture(lightingShader, model);
+}
+
+void round_table(Shader& lightingShader, glm::mat4 alTogether) {
+    glm::mat4 model = transform(alTogether, glm::vec3(5, 5, .2), glm::vec3(0, 0, 0), glm::vec3(90, 0, 0));
+    Cylinders["table_top"].draw(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(.3, 3.5, .3), glm::vec3(Cylinders["table_top"].getTopRadius() - .7, -3.5, Cylinders["table_top"].getTopRadius() - .7), glm::vec3(0, 0, 0));
+    Cylinders["table_stand"].draw(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(2.5, 2.5, .4), glm::vec3(0, -6.9, 0), glm::vec3(-90, 0, 0));
+    Cylinders["table_bottom"].draw(lightingShader, model);
+}
+
+void round_chair(Shader& lightingShader, glm::mat4 alTogether) {
+    glm::mat4 model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(0, -3.5, 6), glm::vec3(0, 0, 0));
+    round_table(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(0, -3.5, -6), glm::vec3(0, 0, 0));
+    round_table(lightingShader, model);
+}
+
+
+void round_table_chair(Shader& lightingShader, glm::mat4 alTogether) {
+    round_table(lightingShader, alTogether);
+    round_chair(lightingShader, alTogether);
 }
