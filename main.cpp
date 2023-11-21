@@ -31,6 +31,7 @@ using namespace std;
 
 std::map<string, Cube> Cubes;
 std::map<string, Cylinder> Cylinders;
+std::map<string, Model> Models;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -45,12 +46,13 @@ void room(map<string, Cube> &Cubes, unsigned int& cubeVAO, Shader& lightingShade
 void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 
-void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void round_table(Shader& lightingShader, glm::mat4 alTogether);
 void round_chair(Shader& lightingShader, glm::mat4 alTogether);
 void round_table_chair(Shader& lightingShader, glm::mat4 alTogether);
+void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
 
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
 
@@ -73,7 +75,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(30.0f, 20.0f, 100.0f));
+Camera camera(glm::vec3(30.0f, 20.0f, 30.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -83,6 +85,10 @@ float lookAtX = 0.0, lookAtY = 0.0, lookAtZ = 0.0;
 glm::vec3 V = glm::vec3(0.0f, 1.0f, 0.0f);
 BasicCamera basic_camera(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ, V);
 
+// Models
+//Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
+//Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
+//Model table_chair_model("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");
 
 // positions of the point lights
 glm::vec3 pointLightPositions[] = {
@@ -174,6 +180,8 @@ void genTextureCylinder(float baseR = 1, float topR = 1, std::string diffPath = 
     Cylinders.insert({ key, table_top });
 }
 
+void drawModel(Model& model, glm::mat4 alTogether);
+
 
 int main()
 {
@@ -219,21 +227,41 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
     //Shader lightingShader("vertexShaderForGouraudShading.vs", "fragmentShaderForGouraudShading.fs");
+    //Shader modelShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
+    Shader lightingShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
     Shader ourShader("vertexShader.vs", "fragmentShader.fs");
+    Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
     
     // Model Loading 
-    Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
-    //Shader modelShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
-
     /*Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
     Model oven("./resources/oven/oven.obj");
     Model monitor("./resources/monitor/10120_LCD_Computer_Monitor_v01_max2011_it2.obj");
     Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");*/
+    //Model oven("./resources/oven/oven.obj");
+
+    //Model backpack("./resources/backpack/backpack.obj");
+    
+     //Model rock("./resources/rock/rock.obj");
+    Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
+    Model sofa("./resources/sofa/sofa.obj");
+    Models.insert({ "table_chair_model", table_chair_model });
+    Models.insert({ "sofa", sofa });
 
     // Generate Textures
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
+    // Fire animation texture
+    vector<unsigned int> texMap;
+    for (int i = 0; i < 10; ++i) {
+        string diffPath = "./textures/fire/" + to_string(i) + ".png";
+        unsigned int DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        unsigned int SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        texMap.push_back(DiffMap);
+        texMap.push_back(SpecMap);
+        Cube cube = Cube(DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
+        Cubes.insert({ "fire_animation", cube });
+    }
+
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
     genTextureCylinder(1, .5, "default_texture.png", "default_texture.png", "table_bottom", 32, 0, 0);
@@ -440,15 +468,39 @@ int main()
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(0x00004000 | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
+
+        modelShader.use();
+        modelShader.setMat4("projection", projection);
+        modelShader.setMat4("view", view);
+        glm::mat4 model;
+        for (int i = 0; i < 4; ++i) {
+            model = transform(glm::mat4(1.0f),
+                glm::vec3(.015, .015, .015),
+                glm::vec3(13.0, 0.0, 28.0 - i * 6),
+                glm::vec3(0, 90, 0));
+
+            modelShader.setMat4("model", model);
+            //table_chair_model.Draw(modelShader);
+            
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            model = transform(glm::mat4(1.0f),
+                glm::vec3(.015, .015, .015),
+                glm::vec3(18.0, 0.0, 28.0 - i * 6),
+                glm::vec3(0, 90, 0));
+            modelShader.setMat4("model", model);
+            //table_chair_model.Draw(modelShader); 
+        }
 
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
         lightingShader.setVec3("viewPos", camera.Position);
-
-        
 
         // point light 1
         spotLight.setUpPointLight(lightingShader);
@@ -459,38 +511,35 @@ int main()
         // point light 4
         pointLight2.setUpPointLight(lightingShader);
 
-
         
 
         // activate shader
         lightingShader.use();
 
         // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        
         lightingShader.setMat4("projection", projection);
         // camera/view transformation
-        glm::mat4 view = camera.GetViewMatrix();
+
         lightingShader.setMat4("view", view);
 
         // Modelling Transformation
         glm::mat4 identityMatrix = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        glm::mat4 translateMatrix, rotateXMatrix, rotateYMatrix, rotateZMatrix, scaleMatrix, model;
+        glm::mat4 translateMatrix, rotateXMatrix, rotateYMatrix, rotateZMatrix, scaleMatrix;
         translateMatrix = glm::translate(identityMatrix, glm::vec3(translate_X, translate_Y, translate_Z));
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .3, scale_Y *.3, scale_Z * .3));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
       
         // room(Cubes, cubeVAO, lightingShader, tmp);
-        food_court(cubeVAO, lightingShader, model);
+        food_court(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, tmp);
         //cart2(cubeVAO, lightingShader, tmp);
         //sphere.drawSphereWithTexture(lightingShader, model);
-
-        round_table_chair(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
         
@@ -551,17 +600,7 @@ int main()
 
         // Loading Models
         
-        translateMatrix = glm::translate(identityMatrix, glm::vec3(translate_X - 4.8, translate_Y + 1.2, translate_Z + 3));
-        rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X - 90), glm::vec3(1.0f, 0.0f, 0.0f));
-        rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
-        rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z - 200), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .03, scale_Y *.03, scale_Z *.03));
-        model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
-        modelShader.use();
-        modelShader.setMat4("projection", projection);
-        modelShader.setMat4("view", view);
-        modelShader.setMat4("model", model);
-        //monitor.Draw(modelShader);
+        
 
         translateMatrix = glm::translate(identityMatrix, glm::vec3(translate_X + 3.3, translate_Y + 1.1, translate_Z + 1.5));
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X - 90), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -591,6 +630,8 @@ int main()
         modelShader.setMat4("model", model);
         //microwave.Draw(modelShader);
 
+        
+        modelShader.use();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -1379,7 +1420,7 @@ glm::mat4 transform(glm::mat4 alTogether, glm::vec3 sc, glm::vec3 tr, glm::vec3 
     return model;
 }
 
-void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
     float length = 1;
     float height = 1;
     float width = 1;
@@ -1394,7 +1435,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     glm::mat4 rotateYMatrix = glm::mat4(1.0f);
     glm::mat4 rotateZMatrix = glm::mat4(1.0f);
 
-    scale = glm::scale(model, glm::vec3(length * 100, height * .1, width * 100));
+    scale = glm::scale(model, glm::vec3(length * 120, height * .1, width * 140));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
@@ -1403,7 +1444,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 100));
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 140));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
@@ -1412,8 +1453,8 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 100));
-    translate = glm::translate(model, glm::vec3(100.0, 0.0, 0.0));
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 140));
+    translate = glm::translate(model, glm::vec3(120.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
@@ -1422,7 +1463,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
-    scale = glm::scale(model, glm::vec3(length * 100, height * 30, width * .1));
+    scale = glm::scale(model, glm::vec3(length * 120, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
@@ -1442,14 +1483,14 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     for (int i = 0; i < 3; ++i) {
         model = transform(alTogether, 
             glm::vec3(length * 2, height * 2, width * 2),
-            glm::vec3(0.0, 0.0, 100.0 - i * 20.4), 
+            glm::vec3(0.0, 0.0, 140.0 - i * 20.4), 
             glm::vec3(0, 90, 0));
         
         cart2(cubeVAO, lightingShader, model);
 
         model = transform(alTogether, 
             glm::vec3(length * 2, height * 2, width * 2),
-            glm::vec3(100.0, 0.0, 80.0 - i * 20.4),
+            glm::vec3(120.0, 0.0, 120.0 - i * 20.4),
             glm::vec3(0, 270, 0));
 
         cart1(cubeVAO, lightingShader, model);
@@ -1462,21 +1503,55 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alToget
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
             glm::vec3(.8, .8, .8),
-            glm::vec3(30.0, 7.1, 90.0 - i * 20),
+            glm::vec3(30.0, 7.1, 130.0 - i * 20),
             glm::vec3(0, 0, 0));
-        round_table_chair(lightingShader, model);
+        //round_table_chair(lightingShader, model);
     }
 
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
             glm::vec3(.8, .8, .8),
-            glm::vec3(70.0, 7.1, 90.0 - i * 20),
+            glm::vec3(75.0, 7.1, 130.0 - i * 20),
             glm::vec3(0, 0, 0));
-        round_table_chair(lightingShader, model);
+        //round_table_chair(lightingShader, model);
     }
-    
+
+    for (int i = 0; i < 4; ++i) {
+        model = transform(alTogether,
+            glm::vec3(.05, .05, .05),
+            glm::vec3(42.0, 0.0, 130.0 - i * 20),
+            glm::vec3(0, 90, 0));
+
+        modelShader.setMat4("model", model);
+        //Models["table_chair_model"].Draw(modelShader);
+
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        model = transform(alTogether,
+            glm::vec3(.05, .05, .05),
+            glm::vec3(62.0, 0.0, 130.0 - i * 20),
+            glm::vec3(0, 90, 0));
+        modelShader.setMat4("model", model);
+        //Models["table_chair_model"].Draw(modelShader);
+    }
+
+    model = transform(alTogether,
+        glm::vec3(5, 5, 5),
+        glm::vec3(62.0, 0.0, 20),
+        glm::vec3(0, 270, 0));
+    modelShader.setMat4("model", model);
+    //Models["sofa"].Draw(modelShader);
+
+    decoration(lightingShader, modelShader, alTogether);
 }
 
+void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
+    glm::mat4 model = transform(alTogether, glm::vec3(10, 5, 1),
+        glm::vec3(10, 0, 0),
+        glm::vec3(0, 0, 0));
+    Cubes["table_surface"].drawCubeWithTexture(lightingShader, model);
+}
 
 void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)
 {
@@ -1578,4 +1653,13 @@ void round_chair(Shader& lightingShader, glm::mat4 alTogether) {
 void round_table_chair(Shader& lightingShader, glm::mat4 alTogether) {
     round_table(lightingShader, alTogether);
     round_chair(lightingShader, alTogether);
+}
+
+
+void drawModel(Model& model, glm::mat4 alTogether) {
+    /*modelShader.use();
+    modelShader.setMat4("projection", projection);
+    modelShader.setMat4("view", view);
+    modelShader.setMat4("model", alTogether);
+    model.Draw(modelShader);*/
 }

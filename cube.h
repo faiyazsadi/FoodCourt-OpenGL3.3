@@ -33,7 +33,7 @@ public:
     float TYmax = 1.0f;
     unsigned int diffuseMap;
     unsigned int specularMap;
-
+    vector<unsigned int> texMap;
     // common property
     float shininess;
 
@@ -50,6 +50,7 @@ public:
         this->specular = spec;
         this->shininess = shiny;
 
+
         setUpCubeVertexDataAndConfigureVertexAttribute();
     }
 
@@ -62,6 +63,20 @@ public:
         this->TYmin = textureYmin;
         this->TXmax = textureXmax;
         this->TYmax = textureYmax;
+
+        setUpCubeVertexDataAndConfigureVertexAttribute();
+    }
+
+    Cube(vector<unsigned int>& texMap, unsigned int dMap, unsigned int sMap, float shiny, float textureXmin, float textureYmin, float textureXmax, float textureYmax)
+    {
+        this->diffuseMap = dMap;
+        this->specularMap = sMap;
+        this->shininess = shiny;
+        this->TXmin = textureXmin;
+        this->TYmin = textureYmin;
+        this->TXmax = textureXmax;
+        this->TYmax = textureYmax;
+        this->texMap = texMap;
 
         setUpCubeVertexDataAndConfigureVertexAttribute();
     }
@@ -91,6 +106,13 @@ public:
         // bind specular map
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, this->specularMap);
+
+        if (texMap.size() > 0) {
+            for (unsigned int i = 0; i < texMap.size(); ++i) {
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, this->texMap[i]);
+            }
+        }
 
         lightingShaderWithTexture.setMat4("model", model);
 
