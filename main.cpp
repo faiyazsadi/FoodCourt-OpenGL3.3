@@ -245,8 +245,10 @@ int main()
      //Model rock("./resources/rock/rock.obj");
     /*Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
     Model sofa("./resources/sofa/sofa.obj");
+    Model woodswing("./resources/woodswing/Models and Textures/woodswing.obj");
     Models.insert({ "table_chair_model", table_chair_model });
-    Models.insert({ "sofa", sofa });*/
+    Models.insert({ "sofa", sofa });
+    Models.insert({ "woodswing", woodswing });*/
 
     // Fire animation texture
 //vector<unsigned int> texMap;
@@ -576,7 +578,6 @@ int main()
 
             modelShader.setMat4("model", model);
             //table_chair_model.Draw(modelShader);
-            
         }
 
         for (int i = 0; i < 4; ++i) {
@@ -1548,6 +1549,40 @@ void vending_machine(Shader& lightingShader, glm::mat4 alTogether) {
 
 }
 
+void photo_frame(Shader& lightingShader, glm::mat4 alTogether) {
+    float length = 1;
+    float height = 1;
+    float width = 1;
+
+    // base
+    glm::mat4 identityMatrix = glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    glm::mat4 rotate = glm::mat4(1.0f);
+    glm::mat4 rotateXMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateYMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateZMatrix = glm::mat4(1.0f);
+
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(70, 15, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(70, 8, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(75, 18, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(4, 6, .3), glm::vec3(75, 10, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(75, 5, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(81, 15, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(81, 8, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    
+}
+
 void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
     float length = 1;
     float height = 1;
@@ -1563,10 +1598,15 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     glm::mat4 rotateYMatrix = glm::mat4(1.0f);
     glm::mat4 rotateZMatrix = glm::mat4(1.0f);
 
+
     scale = glm::scale(model, glm::vec3(length * 120, height * .1, width * 140));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    photo_frame(lightingShader, alTogether);
+    model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(-30, 0, 0), glm::vec3(0, 0, 0));
+    photo_frame(lightingShader, model);
 
     // left wall
     model = glm::mat4(1.0f);
@@ -1602,7 +1642,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.1));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
 
     // starry base
     model = glm::mat4(1.0f);
@@ -1629,7 +1669,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(80.0, 0.0, 0.1));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
 
     // starry base
     model = glm::mat4(1.0f);
@@ -1654,7 +1694,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(40, 0, 0.1));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
 
 
     // back wall
@@ -1735,6 +1775,8 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
 
     }
 
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
             glm::vec3(.05, .05, .05),
@@ -1746,10 +1788,25 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
 
     model = transform(alTogether,
         glm::vec3(5, 5, 5),
-        glm::vec3(62.0, 0.0, 20),
+        glm::vec3(95.0, 0.0, 5),
         glm::vec3(0, 270, 0));
     modelShader.setMat4("model", model);
     //Models["sofa"].Draw(modelShader);
+
+    
+    model = transform(alTogether,
+        glm::vec3(2, 2, 2),
+        glm::vec3(10, -2, 10),
+        glm::vec3(0, 270, 0));
+    modelShader.setMat4("model", model);
+    //Models["woodswing"].Draw(modelShader);
+
+    model = transform(alTogether,
+        glm::vec3(2, 2, 2),
+        glm::vec3(30.0, -2, 10),
+        glm::vec3(0, 270, 0));
+    modelShader.setMat4("model", model);
+    //Models["woodswing"].Draw(modelShader);
 
     decoration(lightingShader, modelShader, alTogether);
 }
