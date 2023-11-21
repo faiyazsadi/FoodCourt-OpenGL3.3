@@ -248,22 +248,26 @@ int main()
     Models.insert({ "table_chair_model", table_chair_model });
     Models.insert({ "sofa", sofa });*/
 
+    // Fire animation texture
+//vector<unsigned int> texMap;
+//unsigned int DiffMap;
+//unsigned int SpecMap;
+//for (int i = 0; i < 300; ++i) {
+//    string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
+//    DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+//    SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+//    texMap.push_back(DiffMap);
+//    texMap.push_back(SpecMap);
+//}
+//Cube cube = Cube(texMap, DiffMap, SpecMap, 32, 0.0f, 0.0f, 1.0f, 1.0f);
+//Cubes.insert({ "fire_animation", cube });
+
     // Generate Textures
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
     genTexture("./textures/vending/vending.jpg", "./textures/vending/vending.jpg", "vending", 32.0f, 1.0f, 1.0f);
-    // Fire animation texture
-    //vector<unsigned int> texMap;
-    //unsigned int DiffMap;
-    //unsigned int SpecMap;
-    //for (int i = 0; i < 300; ++i) {
-    //    string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
-    //    DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    //    SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    //    texMap.push_back(DiffMap);
-    //    texMap.push_back(SpecMap);
-    //}
-    //Cube cube = Cube(texMap, DiffMap, SpecMap, 32, 0.0f, 0.0f, 1.0f, 1.0f);
-    //Cubes.insert({ "fire_animation", cube });
+    genTexture("./textures/starry/starry.jpg", "./textures/starry/starry.jpg", "starry", 32.0f, 1.0f, 1.0f);
+    genTexture("./textures/abstract/abs1.jpg", "./textures/abstract/abs1.jpg", "abs1", 32.0f, 1.0f, 1.0f);
+
 
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
@@ -1581,6 +1585,76 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     translate = glm::translate(model, glm::vec3(120.0, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // starry left wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 40));
+    translate = glm::translate(model, glm::vec3(0.1, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["starry"].drawCubeWithTexture(lightingShader, model);
+
+    // starry back wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.1));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+
+    // starry base
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
+    translate = glm::translate(model, glm::vec3(0.0, 0.1, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+
+
+    // starry right wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 40));
+    translate = glm::translate(model, glm::vec3(119.9, 0.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["starry"].drawCubeWithTexture(lightingShader, model);
+
+    // starry back wall
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
+    translate = glm::translate(model, glm::vec3(80.0, 0.0, 0.1));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+
+    // starry base
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
+    translate = glm::translate(model, glm::vec3(80.0, 0.1, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+
+    // starry mid base
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
+    translate = glm::translate(model, glm::vec3(40.0, 0.1, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+
+    // starry mid back
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
+    translate = glm::translate(model, glm::vec3(40, 0, 0.1));
+    model = alTogether * translate * scale;
+    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
 
 
     // back wall
