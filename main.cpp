@@ -75,7 +75,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(30.0f, 20.0f, 30.0f));
+Camera camera(glm::vec3(10.0f, 20.0f, 30.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -252,15 +252,18 @@ int main()
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
     // Fire animation texture
     vector<unsigned int> texMap;
+    unsigned int DiffMap;
+    unsigned int SpecMap;
     for (int i = 0; i < 10; ++i) {
-        string diffPath = "./textures/fire/" + to_string(i) + ".png";
-        unsigned int DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-        unsigned int SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
+        std::cout << diffPath << std::endl;
+        DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
         texMap.push_back(DiffMap);
         texMap.push_back(SpecMap);
-        Cube cube = Cube(DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
-        Cubes.insert({ "fire_animation", cube });
     }
+    Cube cube = Cube(texMap, DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
+    Cubes.insert({ "fire_animation", cube });
 
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
@@ -530,7 +533,7 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .5, scale_Y *.5, scale_Z * .5));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
@@ -1550,7 +1553,7 @@ void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogethe
     glm::mat4 model = transform(alTogether, glm::vec3(10, 5, 1),
         glm::vec3(10, 0, 0),
         glm::vec3(0, 0, 0));
-    Cubes["table_surface"].drawCubeWithTexture(lightingShader, model);
+    Cubes["fire_animation"].drawCubeWithTexture(lightingShader, model);
 }
 
 void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)

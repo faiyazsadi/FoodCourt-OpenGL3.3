@@ -98,7 +98,7 @@ public:
         lightingShaderWithTexture.setInt("material.diffuse", 0);
         lightingShaderWithTexture.setInt("material.specular", 1);
         lightingShaderWithTexture.setFloat("material.shininess", this->shininess);
-
+        lightingShaderWithTexture.setMat4("model", model);
 
         // bind diffuse map
         glActiveTexture(GL_TEXTURE0);
@@ -106,18 +106,22 @@ public:
         // bind specular map
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, this->specularMap);
-
-        if (texMap.size() > 0) {
-            for (unsigned int i = 0; i < texMap.size(); ++i) {
-                glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, this->texMap[i]);
-            }
-        }
-
-        lightingShaderWithTexture.setMat4("model", model);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(lightTexCubeVAO);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        if ((unsigned int) texMap.size() > 0) {
+            std::cout << "tex:" << texMap.size() << std::endl;
+            for (unsigned int i = 0; i < texMap.size(); i += 2) {
+                std::cout << texMap[i]  << ' ' << texMap[i + 1] << std::endl;
+                lightingShaderWithTexture.setInt("material.diffuse", i);
+                lightingShaderWithTexture.setInt("material.specular", i + 1);
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, this->texMap[i]);
+                glActiveTexture(GL_TEXTURE0 + i + 1);
+                glBindTexture(GL_TEXTURE_2D, this->texMap[i + 1]);
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            }
+        }
     }
 
     void drawCubeWithMaterialisticProperty(Shader& lightingShader, glm::mat4 model = glm::mat4(1.0f))
