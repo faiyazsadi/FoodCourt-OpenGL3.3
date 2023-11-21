@@ -36,6 +36,8 @@ std::map<string, Model> Models;
 unsigned int diffMap1, diffMap2, diffMap3, diffMap4, diffMap5, diffMap6;
 unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
 
+unsigned int ovenMap1, ovenMap2, grillMap;
+
 unsigned int mp1, mp2, mp3, mp4, mp5, mp6;
 float angP1, angP2, angP3, angP4, angP5, angP6;
 float y2, y3, y4;
@@ -217,7 +219,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(0.0f, 2.0f, 5.0f));
+Camera camera(glm::vec3(5.0f, 2.0f, 5.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -234,10 +236,15 @@ BasicCamera basic_camera(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ, V);
 
 // positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(30.0f,  5.50f,  40.0f), /// Spot
+    glm::vec3(30.0f,  5.50f,  30.0f), /// Spot
     glm::vec3(15.0f,  1.5f,  40.0f),   /// Point 1
     glm::vec3(20.0f,  50.5f,  40.5f), /// Sun
-    glm::vec3(25.0f,  1.5f,  40.0f) // point 2
+    glm::vec3(25.0f,  1.5f,  40.0f), // point 2
+
+    glm::vec3(25.0f,  10.5f,  40.0f), // disco 1
+    glm::vec3(25.0f,  1.5f,  40.0f), // disco 2
+    glm::vec3(25.0f,  5.5f,  40.0f), // disco 3
+    glm::vec3(25.0f,  7.5f,  40.0f) // disco 4
 };
 
 
@@ -251,6 +258,54 @@ PointLight spotLight(
     0.09f,  //k_l
     0.032f, //k_q
     1       // light number // spot
+);
+
+PointLight disco1(
+
+    pointLightPositions[4].x, pointLightPositions[4].y, pointLightPositions[4].z,  // position
+    1.0f, 1.0f, 1.0f,     // ambient
+    1.0f, 1.0f, 1.0f,      // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    5       // light number // spot
+);
+
+PointLight disco2(
+
+    pointLightPositions[5].x, pointLightPositions[5].y, pointLightPositions[5].z,  // position
+    1.0f, 1.0f, 1.0f,     // ambient
+    1.0f, 1.0f, 1.0f,      // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    6       // light number // spot
+);
+
+PointLight disco3(
+
+    pointLightPositions[6].x, pointLightPositions[6].y, pointLightPositions[7].z,  // position
+    1.0f, 1.0f, 1.0f,     // ambient
+    1.0f, 1.0f, 1.0f,      // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    7       // light number // spot
+);
+
+PointLight disco4(
+
+    pointLightPositions[7].x, pointLightPositions[7].y, pointLightPositions[7].z,  // position
+    1.0f, 1.0f, 1.0f,     // ambient
+    1.0f, 1.0f, 1.0f,      // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    8       // light number // spot
 );
 
 PointLight pointLight1(
@@ -489,6 +544,15 @@ int main()
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
     genTextureCylinder(1, .5, "default_texture.png", "default_texture.png", "table_bottom", 32, 0, 0);
+
+
+    string ovenPath1 = "./textures/oven/oven.jpg";
+    string ovenPath2 = "./textures/oven/oven2.jpg";
+    ovenMap1 = loadTexture(ovenPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    ovenMap2 = loadTexture(ovenPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+
+    string grillPath = "./textures/grill/grill.jpg";
+    grillMap = loadTexture(grillPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 
     string defaultDiffPath1 = "default_texture.png";
     string defaultSpecPath1 = "default_texture.png";
@@ -737,6 +801,11 @@ int main()
         // point light 4
         pointLight2.setUpPointLight(lightingShader);
 
+        //disco1.setUpPointLight(lightingShader);
+        //disco2.setUpPointLight(lightingShader);
+        //disco3.setUpPointLight(lightingShader);
+        //disco4.setUpPointLight(lightingShader);
+
         model = transform(glm::mat4(1.0f), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
         lightingShaderNoTexture.use();
         lightingShaderNoTexture.setMat4("projection", projection);
@@ -765,7 +834,7 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X, scale_Y, scale_Z));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
@@ -1586,6 +1655,30 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 1.6), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
 
+    // oven 1
+    Cube oven;
+    model = transform(alTogether, glm::vec3(1.5, 1, 1), glm::vec3(8, 2, 0), glm::vec3(0, 0, 0));
+    oven.drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(1.5, 1, .01), glm::vec3(8, 2, 1.01), glm::vec3(0, 0, 0));
+    oven.setTextureProperty(ovenMap1, ovenMap1, 32.0);
+    oven.drawCubeWithTexture(lightingShader, model);
+
+    // oven 2
+    model = transform(alTogether, glm::vec3(1.5, 1, 1), glm::vec3(0.5, 2, 0), glm::vec3(0, 0, 0));
+    oven.drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(1.5, 1, .01), glm::vec3(0.5, 2, 1.01), glm::vec3(0, 0, 0));
+    oven.setTextureProperty(ovenMap2, ovenMap2, 32.0);
+    oven.drawCubeWithTexture(lightingShader, model);
+
+
+    // grill
+    model = transform(alTogether, glm::vec3(1, .2, 1.5), glm::vec3(0.2, 2, 6), glm::vec3(0, 0, 0));
+    oven.drawCube(lightingShader, model);
+    model = transform(alTogether, glm::vec3(1, .01, 1.5), glm::vec3(0.2, 2.21, 6), glm::vec3(0, 0, 0));
+    oven.setTextureProperty(grillMap, grillMap, 32.0);
+    oven.drawCubeWithTexture(lightingShader, model);
+
+
     // for right top shelf
     // bowls
     float x = 0;
@@ -1982,6 +2075,18 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     photo_frame(lightingShader, alTogether);
     model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(-30, 0, 0), glm::vec3(0, 0, 0));
     photo_frame(lightingShader, model);
+
+    // Disco
+    Sphere disco = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, diffMap1, diffMap1, 0, 0, 1, 1);
+    scale = glm::scale(model, glm::vec3(length * 50, height * 50, width * 50));
+    translate = glm::translate(model, glm::vec3(800.0, 300.0, 800.0));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
+    rotate = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+    model = alTogether * translate * rotate * scale;
+    disco.drawSphereWithTexture(lightingShader, model);
+
 
     // left wall
     model = glm::mat4(1.0f);
