@@ -7,6 +7,6 @@ F:\Academic\4.2\CSE 4208 Computer Graphics Laboratory\CSE 4208 Graphics Lab\My P
 D:\Academics\4-2\2. Lab\CSE 4208 (Graphics Lab)\Lab 3_B2\Lighting Student Version\x64\Debug\Lighting.exe
 C:\Users\User\Desktop\Lab-03\Lighting Student Version\x64\Debug\Lighting.exe
 D:\SADI\Computer Graphics\Lab\Lab 3\Lighting Student Version\x64\Debug\Lighting.exe
-C:\Users\USER\Desktop\Lighting Student Version\x64\Debug\Lighting.exe
 H:\Computer Graphics\Lab\Lab 4\Assignment\Lighting Student Version\x64\Debug\Lighting.exe
 E:\Lighting Student Version\x64\Debug\Lighting.exe
+C:\Users\USER\Desktop\Lighting Student Version\x64\Debug\Lighting.exe

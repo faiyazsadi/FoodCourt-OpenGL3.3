@@ -75,7 +75,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(10.0f, 20.0f, 30.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -243,27 +243,27 @@ int main()
     //Model backpack("./resources/backpack/backpack.obj");
     
      //Model rock("./resources/rock/rock.obj");
-    Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
+    /*Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
     Model sofa("./resources/sofa/sofa.obj");
     Models.insert({ "table_chair_model", table_chair_model });
-    Models.insert({ "sofa", sofa });
+    Models.insert({ "sofa", sofa });*/
 
     // Generate Textures
     genTexture("deez.png", "deez.png", "deez", 32.0f, 1.0f, 1.0f);
+    genTexture("./textures/vending/vending.jpg", "./textures/vending/vending.jpg", "vending", 32.0f, 1.0f, 1.0f);
     // Fire animation texture
-    vector<unsigned int> texMap;
-    unsigned int DiffMap;
-    unsigned int SpecMap;
-    for (int i = 0; i < 10; ++i) {
-        string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
-        std::cout << diffPath << std::endl;
-        DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-        SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-        texMap.push_back(DiffMap);
-        texMap.push_back(SpecMap);
-    }
-    Cube cube = Cube(texMap, DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
-    Cubes.insert({ "fire_animation", cube });
+    //vector<unsigned int> texMap;
+    //unsigned int DiffMap;
+    //unsigned int SpecMap;
+    //for (int i = 0; i < 300; ++i) {
+    //    string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
+    //    DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //    SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //    texMap.push_back(DiffMap);
+    //    texMap.push_back(SpecMap);
+    //}
+    //Cube cube = Cube(texMap, DiffMap, SpecMap, 32, 0.0f, 0.0f, 1.0f, 1.0f);
+    //Cubes.insert({ "fire_animation", cube });
 
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
@@ -355,7 +355,91 @@ int main()
         -0.9600, 0.3300, 5.1000,
     };
 
+    vector<float> ctrlBowl1 =
+    {
+        0.2350, 1.8650, 5.1000,
+        0.0800, 1.8850, 5.1000,
+        -0.1300, 1.9000, 5.1000,
+        -0.3100, 1.8450, 5.1000,
+        -0.4000, 1.7000, 5.1000
+    };
+
+    vector<float> ctrlVase = {
+    0.0550, 2.0150, 5.1000,
+    -0.0700, 2.0250, 5.1000,
+    -0.2750, 2.0300, 5.1000,
+    -0.4150, 1.9400, 5.1000,
+    -0.4250, 1.7900, 5.1000,
+    -0.3300, 1.5950, 5.1000,
+    -0.2450, 1.4450, 5.1000,
+    -0.2150, 1.3100, 5.1000,
+    -0.2150, 1.1900, 5.1000,
+    -0.2050, 1.0800, 5.1000,
+    -0.2100, 0.9350, 5.1000,
+    -0.2300, 0.7800, 5.1000,
+    -0.2850, 0.6750, 5.1000
+    };
+
+    vector<float> ctrlBowl2 = {
+        0.2450, 2.0050, 5.1000,
+        0.1200, 2.0050, 5.1000,
+        0.0200, 2.0100, 5.1000,
+        -0.1300, 2.0300, 5.1000,
+        -0.2800, 2.0150, 5.1000,
+        -0.3850, 2.0150, 5.1000,
+        -0.3900, 1.9200, 5.1000,
+        -0.3900, 1.7700, 5.1000,
+        -0.3800, 1.6050, 5.1000,
+    };
+    vector<float> ctrlPlate = {
+
+        0.1000, 1.8600, 5.1000,
+        -0.0200, 1.8700, 5.1000,
+        -0.2050, 1.8700, 5.1000,
+        -0.4100, 1.8500, 5.1000,
+        -0.5000, 1.8250, 5.1000,
+        -0.6100, 1.8000, 5.1000,
+
+    };
+    vector<float> ctrlDecor1 = {
+        -0.1500, 1.9050, 5.1000,
+        -0.3650, 1.8500, 5.1000,
+        -0.4700, 1.7200, 5.1000,
+        -0.5250, 1.5600, 5.1000,
+        -0.4650, 1.4050, 5.1000,
+        -0.3400, 1.3100, 5.1000,
+        -0.1900, 1.2950, 5.1000,
+    };
     
+    vector<float> ctrlDecor2 = {
+        -0.0700, 2.0750, 5.1000,
+        -0.0950, 1.9600, 5.1000,
+        -0.1250, 1.8100, 5.1000,
+        -0.2000, 1.6300, 5.1000,
+        -0.2300, 1.4650, 5.1000,
+        -0.2050, 1.2600, 5.1000,
+        -0.1550, 1.1200, 5.1000,
+        -0.0950, 0.8800, 5.1000,
+    };
+    vector<float> ctrlDecor3 = {
+        -0.1350, 1.6300, 5.1000,
+        -0.3850, 1.5200, 5.1000,
+        -0.5150, 1.3250, 5.1000,
+        -0.3800, 1.1300, 5.1000,
+        -0.1650, 1.0900, 5.1000,
+    };
+
+    Curve decor1 = Curve(ctrlDecor1, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    Curve decor2 = Curve(ctrlDecor2, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    Curve decor3 = Curve(ctrlDecor3, defaultDiffMap1, defaultSpecMap1, 32.0f);
+
+
+    Curve bowl1 = Curve(ctrlBowl1, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    Curve bowl2 = Curve(ctrlBowl2, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    Curve vase = Curve(ctrlVase, defaultDiffMap1, defaultSpecMap1, 32.0f);
+    Curve plate= Curve(ctrlPlate, defaultDiffMap1, defaultSpecMap1, 32.0f);
+
+
     Curve obj = Curve(controlPoints, defaultDiffMap1, defaultSpecMap1, 32.0f);
     Sphere sphere = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, defaultDiffMap1, defaultSpecMap1, 0, 0, 1, 1);
     
@@ -467,7 +551,7 @@ int main()
         // input
         // -----
         processInput(window);
-
+        
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -533,15 +617,15 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .5, scale_Y *.5, scale_Z * .5));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
-      
+        //decoration(lightingShader, modelShader, model);
         // room(Cubes, cubeVAO, lightingShader, tmp);
         food_court(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, tmp);
-        //cart2(cubeVAO, lightingShader, tmp);
+        //cart2(cubeVAO, lightingShader, model);
         //sphere.drawSphereWithTexture(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
@@ -600,6 +684,7 @@ int main()
         
         // Bezeir Curve Objects
         //obj.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
+        //bowl.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));
 
         // Loading Models
         
@@ -1224,6 +1309,24 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    
+
+
+    //right top shelf
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .6, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(9.5, 4.5, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    //right bottom shelf
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * .6, height * .1, width * 8));
+    translate = glm::translate(model, glm::vec3(9.5, 3.5, 0));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
     // right table top
     model = glm::mat4(1.0f);
@@ -1287,6 +1390,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
 }
 
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
@@ -1423,6 +1527,23 @@ glm::mat4 transform(glm::mat4 alTogether, glm::vec3 sc, glm::vec3 tr, glm::vec3 
     return model;
 }
 
+void vending_machine(Shader& lightingShader, glm::mat4 alTogether) {
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f);
+    glm::mat4 scale = glm::mat4(1.0f);
+    glm::mat4 rotate = glm::mat4(1.0f);
+    glm::mat4 rotateXMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateYMatrix = glm::mat4(1.0f);
+    glm::mat4 rotateZMatrix = glm::mat4(1.0f);
+
+    model = transform(alTogether, glm::vec3(4.1, 12, 6), glm::vec3(0, 0, 72), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(.1, 12, 6), glm::vec3(4.2, 0, 72), glm::vec3(0, 0, 0));
+    Cubes["vending"].drawCubeWithTexture(lightingShader, model);
+
+}
+
 void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
     float length = 1;
     float height = 1;
@@ -1499,6 +1620,16 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         cart1(cubeVAO, lightingShader, model);
     }
 
+    vending_machine(lightingShader, alTogether);
+    model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(0, 0, -8), glm::vec3(0, 0, 0));
+    vending_machine(lightingShader, model);
+
+
+    model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(120, 0, 150), glm::vec3(0, 180, 0));
+    vending_machine(lightingShader, model);
+    model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(120, 0, 142), glm::vec3(0, 180, 0));
+    vending_machine(lightingShader, model);
+
     model = transform(alTogether,
         glm::vec3(1, 1, 1),
         glm::vec3(40.0, 7.1, 100.0),
@@ -1553,7 +1684,25 @@ void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogethe
     glm::mat4 model = transform(alTogether, glm::vec3(10, 5, 1),
         glm::vec3(10, 0, 0),
         glm::vec3(0, 0, 0));
-    Cubes["fire_animation"].drawCubeWithTexture(lightingShader, model);
+
+
+    //Cubes["fire_animation"].drawCubeWithTexture(lightingShader, model);
+    //for (int i = 0; i < 5; ++i) {
+    //    unsigned int DiffMap;
+    //    unsigned int SpecMap;
+    //    for (int i = 0; i < 10; ++i) {
+    //        string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
+    //        DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //        SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //        Cube cube = Cube(DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
+    //        //Cubes.insert({ "fire_animation", cube });
+    //        cube.drawCubeWithTexture(lightingShader, model);
+    //    }
+    //}
+
+
+
+    
 }
 
 void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether)

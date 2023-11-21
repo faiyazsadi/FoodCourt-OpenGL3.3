@@ -106,22 +106,23 @@ public:
         // bind specular map
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, this->specularMap);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(lightTexCubeVAO);
-        if ((unsigned int) texMap.size() > 0) {
-            std::cout << "tex:" << texMap.size() << std::endl;
+        /*if ((unsigned int) texMap.size() > 0) {
             for (unsigned int i = 0; i < texMap.size(); i += 2) {
-                std::cout << texMap[i]  << ' ' << texMap[i + 1] << std::endl;
-                lightingShaderWithTexture.setInt("material.diffuse", i);
-                lightingShaderWithTexture.setInt("material.specular", i + 1);
-                glActiveTexture(GL_TEXTURE0 + i);
+                lightingShaderWithTexture.use();
+                lightingShaderWithTexture.setInt("material.diffuse", 0);
+                lightingShaderWithTexture.setInt("material.specular", 1);
+                glActiveTexture(GL_TEXTURE0 + (i % 15));
                 glBindTexture(GL_TEXTURE_2D, this->texMap[i]);
-                glActiveTexture(GL_TEXTURE0 + i + 1);
+                glActiveTexture(GL_TEXTURE0 + (i % 15) + 1);
                 glBindTexture(GL_TEXTURE_2D, this->texMap[i + 1]);
                 glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
             }
-        }
+        }*/
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     }
 
     void drawCubeWithMaterialisticProperty(Shader& lightingShader, glm::mat4 model = glm::mat4(1.0f))
