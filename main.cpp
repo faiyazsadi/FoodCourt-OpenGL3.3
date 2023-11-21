@@ -38,6 +38,7 @@ unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
 
 unsigned int ovenMap1, ovenMap2, grillMap;
 unsigned int ts1, ts2, ts3, ts4, ts5, ts6;
+unsigned int bowlMap, mugMap;
 
 unsigned int mp1, mp2, mp3, mp4, mp5, mp6;
 float angP1, angP2, angP3, angP4, angP5, angP6;
@@ -552,6 +553,18 @@ int main()
     genTexture("./textures/stalls/stall5/tab.png", "./textures/stalls/stall5/tab.png", "st5t", 32.0, 1, 1);
     genTexture("./textures/stalls/stall6/tab.png", "./textures/stalls/stall6/tab.png", "st6t", 32.0, 1, 1);
 
+    string bowlPath = "./textures/stalls/stall1/bowl.jfif";
+    bowlMap = loadTexture(bowlPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    string mugPath = "./textures/stalls/stall1/mug.png";
+    mugMap = loadTexture(mugPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+
+    //genTexture("./textures/stalls/stall1/bowl.jfif", "./textures/stalls/stall1/bowl.jfif", "st1b", 32.0, 1, 1);
+    //genTexture("./textures/stalls/stall2/bowl.jfif", "./textures/stalls/stall2/bowl.jfif", "st2b", 32.0, 1, 1);
+    //genTexture("./textures/stalls/stall3/bowl.jfif", "./textures/stalls/stall3/bowl.jfif", "st3b", 32.0, 1, 1);
+    //genTexture("./textures/stalls/stall4/bowl.jfif", "./textures/stalls/stall4/bowl.jfif", "st4b", 32.0, 1, 1);
+    //genTexture("./textures/stalls/stall5/bowl.jfif", "./textures/stalls/stall5/bowl.jfif", "st5b", 32.0, 1, 1);
+    //genTexture("./textures/stalls/stall6/bowl.jfif", "./textures/stalls/stall6/bowl.jfif", "st6b", 32.0, 1, 1);
+
 
     genTexture("./textures/menu/p1.jpg", "./textures/menu/p1.jpg", "mp1", 32.0, 1.0, 1.0f);
     genTexture("./textures/menu/p2.jpeg", "./textures/menu/p2.jpeg", "mp2", 32.0, 1.0, 1.0f);
@@ -565,10 +578,10 @@ int main()
     genTextureCylinder(1, .5, "default_texture.png", "default_texture.png", "table_bottom", 32, 0, 0);
 
 
-    string ovenPath1 = "./textures/oven/oven.jpg";
+    /*string ovenPath1 = "./textures/oven/oven.jpg";
     string ovenPath2 = "./textures/oven/oven2.jpg";
     ovenMap1 = loadTexture(ovenPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    ovenMap2 = loadTexture(ovenPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    ovenMap2 = loadTexture(ovenPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);*/
 
     string grillPath = "./textures/grill/grill.jpg";
     grillMap = loadTexture(grillPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -1578,7 +1591,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
     model = alTogether * translate * scale;
-    Cubes["ts1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["ts6"].drawCubeWithTexture(lightingShader, model);
 
     // base
     model = glm::mat4(1.0f);
@@ -1587,7 +1600,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // back
     model = glm::mat4(1.0f);
@@ -1596,7 +1609,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6w"].drawCubeWithTexture(lightingShader, model);
 
     // left
     model = glm::mat4(1.0f);
@@ -1605,7 +1618,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6w"].drawCubeWithTexture(lightingShader, model);
 
     // right
     model = glm::mat4(1.0f);
@@ -1614,10 +1627,10 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -1649,7 +1662,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -1756,7 +1769,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 4.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     //right bottom shelf
     model = glm::mat4(1.0f);
@@ -1764,7 +1777,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 3.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // right table top
     model = glm::mat4(1.0f);
@@ -1773,7 +1786,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // right table front
     model = glm::mat4(1.0f);
@@ -1782,7 +1795,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
     translate = glm::translate(model, glm::vec3(1.4, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // top
     model = glm::mat4(1.0f);
@@ -1791,7 +1804,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // front
     model = glm::mat4(1.0f);
@@ -1800,7 +1813,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     //// front desk
     //model = glm::mat4(1.0f);
@@ -1818,7 +1831,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .01, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // Menu Card
     glm::mat4 identityMatrix = glm::mat4(1.0f);
@@ -1879,12 +1892,6 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
 
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
-
 
     // back table top
     model = glm::mat4(1.0f);
@@ -1893,7 +1900,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
     // back table front
     model = glm::mat4(1.0f);
@@ -1902,7 +1909,7 @@ void cart7(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st6t"].drawCubeWithTexture(lightingShader, model);
 
 }
 void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
@@ -1916,7 +1923,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
     model = alTogether * translate * scale;
-    Cubes["ts1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["ts5"].drawCubeWithTexture(lightingShader, model);
 
     // base
     model = glm::mat4(1.0f);
@@ -1925,7 +1932,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // back
     model = glm::mat4(1.0f);
@@ -1934,7 +1941,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5w"].drawCubeWithTexture(lightingShader, model);
 
     // left
     model = glm::mat4(1.0f);
@@ -1943,7 +1950,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5w"].drawCubeWithTexture(lightingShader, model);
 
     // right
     model = glm::mat4(1.0f);
@@ -1952,10 +1959,10 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -1987,7 +1994,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -2094,7 +2101,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 4.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     //right bottom shelf
     model = glm::mat4(1.0f);
@@ -2102,7 +2109,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 3.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // right table top
     model = glm::mat4(1.0f);
@@ -2111,7 +2118,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // right table front
     model = glm::mat4(1.0f);
@@ -2120,7 +2127,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
     translate = glm::translate(model, glm::vec3(1.4, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // top
     model = glm::mat4(1.0f);
@@ -2129,7 +2136,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // front
     model = glm::mat4(1.0f);
@@ -2138,7 +2145,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     //// front desk
     //model = glm::mat4(1.0f);
@@ -2156,7 +2163,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .01, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // Menu Card
     glm::mat4 identityMatrix = glm::mat4(1.0f);
@@ -2217,12 +2224,6 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
 
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
-
 
     // back table top
     model = glm::mat4(1.0f);
@@ -2231,7 +2232,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
     // back table front
     model = glm::mat4(1.0f);
@@ -2240,7 +2241,7 @@ void cart6(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st5t"].drawCubeWithTexture(lightingShader, model);
 
 }
 void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
@@ -2254,7 +2255,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
     model = alTogether * translate * scale;
-    Cubes["ts1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["ts4"].drawCubeWithTexture(lightingShader, model);
 
     // base
     model = glm::mat4(1.0f);
@@ -2263,7 +2264,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // back
     model = glm::mat4(1.0f);
@@ -2272,7 +2273,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4w"].drawCubeWithTexture(lightingShader, model);
 
     // left
     model = glm::mat4(1.0f);
@@ -2281,7 +2282,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4w"].drawCubeWithTexture(lightingShader, model);
 
     // right
     model = glm::mat4(1.0f);
@@ -2290,10 +2291,10 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -2325,7 +2326,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -2432,7 +2433,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 4.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     //right bottom shelf
     model = glm::mat4(1.0f);
@@ -2440,7 +2441,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 3.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // right table top
     model = glm::mat4(1.0f);
@@ -2449,7 +2450,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // right table front
     model = glm::mat4(1.0f);
@@ -2458,7 +2459,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
     translate = glm::translate(model, glm::vec3(1.4, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // top
     model = glm::mat4(1.0f);
@@ -2467,7 +2468,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // front
     model = glm::mat4(1.0f);
@@ -2476,7 +2477,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     //// front desk
     //model = glm::mat4(1.0f);
@@ -2494,7 +2495,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .01, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // Menu Card
     glm::mat4 identityMatrix = glm::mat4(1.0f);
@@ -2555,13 +2556,6 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
 
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
-
-
     // back table top
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
@@ -2569,7 +2563,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
     // back table front
     model = glm::mat4(1.0f);
@@ -2578,7 +2572,7 @@ void cart5(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st4t"].drawCubeWithTexture(lightingShader, model);
 
 }
 void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
@@ -2592,7 +2586,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 5.0, 8));
     model = alTogether * translate * scale;
-    Cubes["ts1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["ts3"].drawCubeWithTexture(lightingShader, model);
 
     // base
     model = glm::mat4(1.0f);
@@ -2601,7 +2595,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["ts3t"].drawCubeWithTexture(lightingShader, model);
 
     // back
     model = glm::mat4(1.0f);
@@ -2610,7 +2604,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 6, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3w"].drawCubeWithTexture(lightingShader, model);
 
     // left
     model = glm::mat4(1.0f);
@@ -2619,7 +2613,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3w"].drawCubeWithTexture(lightingShader, model);
 
     // right
     model = glm::mat4(1.0f);
@@ -2628,10 +2622,10 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 6, width * 8));
     translate = glm::translate(model, glm::vec3(10.0, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -2663,7 +2657,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -2770,7 +2764,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 4.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     //right bottom shelf
     model = glm::mat4(1.0f);
@@ -2778,7 +2772,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .8, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(9.2, 3.5, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // right table top
     model = glm::mat4(1.0f);
@@ -2787,7 +2781,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 1.5, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // right table front
     model = glm::mat4(1.0f);
@@ -2796,7 +2790,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * .10, height * 2, width * 8));
     translate = glm::translate(model, glm::vec3(1.4, 0.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // top
     model = glm::mat4(1.0f);
@@ -2805,7 +2799,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 8));
     translate = glm::translate(model, glm::vec3(0.0, 6.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // front
     model = glm::mat4(1.0f);
@@ -2814,7 +2808,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     //// front desk
     //model = glm::mat4(1.0f);
@@ -2832,7 +2826,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .01, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // Menu Card
     glm::mat4 identityMatrix = glm::mat4(1.0f);
@@ -2893,11 +2887,6 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
 
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
 
 
     // back table top
@@ -2907,7 +2896,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * .1, width * 1.5));
     translate = glm::translate(model, glm::vec3(0.0, 2.0, 0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
     // back table front
     model = glm::mat4(1.0f);
@@ -2916,7 +2905,7 @@ void cart4(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     scale = glm::scale(model, glm::vec3(length * 10, height * 2, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st3t"].drawCubeWithTexture(lightingShader, model);
 
 }
 void cart3(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
@@ -2969,7 +2958,7 @@ void cart3(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     Cubes["st2w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -3001,7 +2990,7 @@ void cart3(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -3230,13 +3219,6 @@ void cart3(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
 
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
-
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
-
 
     // back table top
     model = glm::mat4(1.0f);
@@ -3307,7 +3289,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     Cubes["st1w"].drawCubeWithTexture(lightingShader, model);
 
     // curve objects for right bottom shelf
-    Curve bowl1(ctrlBowl1, diffMap1, diffMap1, 1.0f);
+    Curve bowl1(ctrlBowl1, bowlMap, bowlMap, 1.0f);
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.55, 7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
     model = transform(alTogether, glm::vec3(.5, .5, .5), glm::vec3(9.7, 4.65, 7), glm::vec3(180, 0, 0));
@@ -3339,7 +3321,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
     model = transform(alTogether, glm::vec3(1.2, 1.2, .5), glm::vec3(9.5, 5.9, 3.7), glm::vec3(180, 0, 0));
     bowl1.draw(lightingShader, model, glm::vec3(1.0, 0.0, 1.0));
 
-    Curve glass(glassp, diffMap1, diffMap1, 1.0f);
+    Curve glass(glassp, mugMap, mugMap, 1.0f);
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 3.1), glm::vec3(180, 0, 0));
     glass.draw(lightingShader, model, glm::vec3(1, 1, 1));
     model = transform(alTogether, glm::vec3(.1, .13, .1), glm::vec3(9.5, 3.9, 2.8), glm::vec3(180, 0, 0));
@@ -3568,12 +3550,6 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, g
 
     model = alTogether * translate * rotateXMatrix * scale;
     Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
-
-    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
-        (camera.Position.y - .51) * (camera.Position.y - .51) *
-        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
-
-    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
 
 
     // back table top
