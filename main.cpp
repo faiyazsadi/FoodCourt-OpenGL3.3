@@ -495,21 +495,18 @@ int main()
     Shader lightingShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
     Shader ourShader("vertexShader.vs", "fragmentShader.fs");
     Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
-    //Model oven("./resources/oven/oven.obj");
     
-    // Model Loading 
-    
-    
+    // Model 
 
     //Model backpack("./resources/backpack/backpack.obj");
     
      //Model rock("./resources/rock/rock.obj");
-    /*Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
+    Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
     Model sofa("./resources/sofa/sofa.obj");
     Model woodswing("./resources/woodswing/Models and Textures/woodswing.obj");
     Models.insert({ "table_chair_model", table_chair_model });
     Models.insert({ "sofa", sofa });
-    Models.insert({ "woodswing", woodswing });*/
+    Models.insert({ "woodswing", woodswing });
     Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
     Models.insert({ "cooktop", cooktop });
     Model blender("./resources/blender/11628_kitchen_blender_v1_l2.obj");
@@ -846,15 +843,15 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X, scale_Y, scale_Z));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
         //decoration(lightingShader, modelShader, model);
         // room(Cubes, cubeVAO, lightingShader, tmp);
-        //food_court(cubeVAO, lightingShader, modelShader, model);
+        food_court(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, modelShader, model);
-        cart2(cubeVAO, lightingShader, modelShader, model);
+        //cart2(cubeVAO, lightingShader, modelShader, model);
         //sphere.drawSphereWithTexture(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
@@ -2311,6 +2308,15 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         model = transform(alTogether,
             glm::vec3(.05, .05, .05),
             glm::vec3(62.0, 0.0, 130.0 - i * 20),
+            glm::vec3(0, 90, 0));
+        modelShader.setMat4("model", model);
+        Models["table_chair_model"].Draw(modelShader);
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        model = transform(alTogether,
+            glm::vec3(.05, .05, .05),
+            glm::vec3(82.0, 0.0, 130.0 - i * 20),
             glm::vec3(0, 90, 0));
         modelShader.setMat4("model", model);
         Models["table_chair_model"].Draw(modelShader);
