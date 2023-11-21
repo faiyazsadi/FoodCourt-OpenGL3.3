@@ -156,8 +156,10 @@
     <None Include="1.model_loading.fs" />
     <None Include="1.model_loading.vs" />
     <None Include="fragmentShader.fs" />
+    <None Include="fragmentShaderForPhongShading.fs" />
     <None Include="fragmentShaderWithTexture.fs" />
     <None Include="vertexShader.vs" />
+    <None Include="vertexShaderForPhongShading.vs" />
     <None Include="vertexShaderWithTexture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

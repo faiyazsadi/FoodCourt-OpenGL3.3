@@ -36,6 +36,9 @@ std::map<string, Model> Models;
 unsigned int diffMap1, diffMap2, diffMap3, diffMap4, diffMap5, diffMap6;
 unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
 
+unsigned int mp1, mp2, mp3, mp4, mp5, mp6;
+float angP1, angP2, angP3, angP4, angP5, angP6;
+float y2, y3, y4;
 
 vector<float>glassp{
     0.0900, 1.8350, 5.1000,
@@ -175,6 +178,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void drawCube(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 model, float r, float g, float b);
 
 glm::mat4 transform(glm::mat4 alTogether, glm::vec3 scale, glm::vec3 transform, glm::vec3 rotate);
@@ -185,7 +189,7 @@ void table(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 
 void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
-void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void cart1(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
 void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void round_table(Shader& lightingShader, glm::mat4 alTogether);
 void round_chair(Shader& lightingShader, glm::mat4 alTogether);
@@ -320,6 +324,69 @@ void genTextureCylinder(float baseR = 1, float topR = 1, std::string diffPath = 
 
 void drawModel(Model& model, glm::mat4 alTogether);
 
+glm::mat4 transform2(float tx, float ty, float tz, float rx, float ry, float rz, float sx, float sy, float sz)
+{
+    glm::mat4 identityMatrix = glm::mat4(1.0f);
+    glm::mat4 translateMatrix, rotateXMatrix, rotateYMatrix, rotateZMatrix, scaleMatrix, a;
+    translateMatrix = glm::translate(identityMatrix, glm::vec3(tx, ty, tz));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rx), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(ry), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rz), glm::vec3(0.0f, 0.0f, 1.0f));
+    scaleMatrix = glm::scale(identityMatrix, glm::vec3(sx, sy, sz));
+    a = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
+    return a;
+}
+
+float fridge_door2, fridge_door1, fridge_door_open2, fridge_door_open;
+bool box2 = false;
+
+void fridge(Cube& cube, Shader& lightingShader, Shader& lightingShader2, glm::mat4 model)
+{
+
+    //cube.setMaterialisticProperty(glm::vec3(0.8, 0.792, 0.792));
+    cube.setTextureProperty(diffMap1, diffMap1, 32);
+    glm::mat4 a = transform2(0, 0, -2.5, 0, 0, 0, 1.8 * 2, 3.2 * 2, 0.1 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+    a = transform2(0, 0, -2.5, 0, 0, 0, 0.1 * 2, 3.2 * 2, 1.8 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+    a = transform2(.9, 0, -2.5, 0, 0, 0, 0.1 * 2, 3.2 * 2, 1.8 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+    a = transform2(0, 0, -2.5, 0, 0, 0, 1.8 * 2, 0.1 * 2, 1.8 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+    a = transform2(0, 1.6, -2.5, 0, 0, 0, 1.9 * 2, 0.1 * 2, 1.8 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+    a = transform2(0, 1.1, -2.5, 0, 0, 0, 1.8 * 2, 0.1 * 2, 1.8 * 2);
+    //cube.drawCubeWithMaterialisticProperty(lightingShader2, model * a);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+}
+
+void fridgedoor(Cube& cube, Shader& lightingShader, Shader& lightingShader2, glm::mat4 model)
+{
+
+    cube.setMaterialisticProperty(glm::vec3(0.8, 0.792, 0.792));
+    cube.setTextureProperty(diffMap1, diffMap1, 32.0f);
+    glm::mat4 a = transform2(0, 0, -1.6, 0, -fridge_door_open, 0, 1.9 * 2, 2.2 * 2, 0.11 * 2);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+
+
+    cube.setTextureProperty(diffMap1, diffMap1, 32.0f);
+    a = transform2(0, 1.15, -1.6, 0, -fridge_door_open2, 0, 1.9 * 2, 1 * 2, 0.11 * 2);
+    cube.drawCubeWithTexture(lightingShader, model * a);
+
+
+}
 
 
 int main()
@@ -346,11 +413,13 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
     // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -366,18 +435,19 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    //Shader lightingShader("vertexShaderForGouraudShading.vs", "fragmentShaderForGouraudShading.fs");
+    Shader lightingShaderNoTexture("vertexShaderForGouraudShading.vs", "fragmentShaderForGouraudShading.fs");
     //Shader modelShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
     Shader lightingShader("vertexShaderWithTexture.vs", "fragmentShaderWithTexture.fs");
     Shader ourShader("vertexShader.vs", "fragmentShader.fs");
     Shader modelShader("1.model_loading.vs", "1.model_loading.fs");
+    //Model oven("./resources/oven/oven.obj");
     
     // Model Loading 
     /*Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
     Model oven("./resources/oven/oven.obj");
     Model monitor("./resources/monitor/10120_LCD_Computer_Monitor_v01_max2011_it2.obj");
     Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");*/
-    //Model oven("./resources/oven/oven.obj");
+    
 
     //Model backpack("./resources/backpack/backpack.obj");
     
@@ -409,6 +479,12 @@ int main()
     genTexture("./textures/starry/starry.jpg", "./textures/starry/starry.jpg", "starry", 32.0f, 1.0f, 1.0f);
     genTexture("./textures/abstract/abs1.jpg", "./textures/abstract/abs1.jpg", "abs1", 32.0f, 1.0f, 1.0f);
 
+    genTexture("./textures/menu/p1.jpg", "./textures/menu/p1.jpg", "mp1", 32.0, 1.0, 1.0f);
+    genTexture("./textures/menu/p2.jpeg", "./textures/menu/p2.jpeg", "mp2", 32.0, 1.0, 1.0f);
+    genTexture("./textures/menu/p3.jpg", "./textures/menu/p3.jpg", "mp3", 32.0, 1.0, 1.0f);
+    genTexture("./textures/menu/p4.png", "./textures/menu/p4.png", "mp4", 32.0, 1.0, 1.0f);
+    genTexture("./textures/menu/p5.jpg", "./textures/menu/p5.jpg", "mp5", 32.0, 1.0, 1.0f);
+    genTexture("./textures/menu/p6.png", "./textures/menu/p6.png", "mp6", 32.0, 1.0, 1.0f);
 
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_top", 32, 0, 0);
     genTextureCylinder(1, 1, "default_texture.png", "default_texture.png", "table_stand", 32, 0, 0);
@@ -423,6 +499,7 @@ int main()
     Cubes.insert({ "default_cube", default_cube });
 
 
+
     string diffuseMapPath1 = "back_wall.jpg";
     string specularMapPath1 = "back_wall.jpg";
 
@@ -430,6 +507,8 @@ int main()
     specMap1 = loadTexture(specularMapPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube back_wall = Cube(diffMap1, specMap1, 32.0f, 0.0f, 0.0f, 10.0f, 10.0f);
     Cubes.insert({ "back_wall", back_wall });
+
+    Cube cube(diffMap1, specMap1, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
     // -------------------------------------------------------
     string diffuseMapPath2 = "back_wall.jpg";
@@ -613,6 +692,8 @@ int main()
         glClear(0x00004000 | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 model = transform(glm::mat4(1.0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+        
+
         /*decor1.draw(lightingShader, model, glm::vec3(1.0f, 0.0f, 1.0f));*/
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -641,6 +722,7 @@ int main()
             //table_chair_model.Draw(modelShader); 
         }
 
+        
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
@@ -655,7 +737,16 @@ int main()
         // point light 4
         pointLight2.setUpPointLight(lightingShader);
 
-        
+        model = transform(glm::mat4(1.0f), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+        lightingShaderNoTexture.use();
+        lightingShaderNoTexture.setMat4("projection", projection);
+        lightingShaderNoTexture.setMat4("view", view);
+
+
+       /* model = transform2(0, 0, 0, 0, 0, 0, 1, 1, 1);
+        lightingShaderNoTexture.setMat4("model", model);
+        fridge(cube, lightingShader, lightingShaderNoTexture, model);
+        fridgedoor(cube, lightingShader, lightingShaderNoTexture, model);*/
 
         // activate shader
         lightingShader.use();
@@ -681,7 +772,7 @@ int main()
         //decoration(lightingShader, modelShader, model);
         // room(Cubes, cubeVAO, lightingShader, tmp);
         //food_court(cubeVAO, lightingShader, modelShader, model);
-        //cart1(cubeVAO, lightingShader, tmp);
+        //cart1(cubeVAO, lightingShader, modelShader, model);
         cart2(cubeVAO, lightingShader, model);
         //sphere.drawSphereWithTexture(lightingShader, model);
         
@@ -1026,8 +1117,89 @@ void room(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShade
     
 }
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_7 && action == GLFW_PRESS) {
+        float dist = camera.Position.x - .67;
+        dist *= dist;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.z - 1.16;
+        dist *= camera.Position.z - 1, 16;
+        dist = sqrt(dist);
 
+        if (dist <= 20.0f) {
+            std::cout << "HERE" << std::endl;
+            angP1 = 180;
+        }
+        
+    }
+    if (key == GLFW_KEY_8 && action == GLFW_PRESS) {
+        float dist = camera.Position.x - .67;
+        dist *= dist;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.z - 1.16;
+        dist *= camera.Position.z - 1, 16;
+        dist = sqrt(dist);
 
+        if (dist <= 20.0f) {
+            std::cout << "HERE" << std::endl;
+            angP2 = 180;
+            y2 = .02;
+        }
+
+    }
+    if (key == GLFW_KEY_9 && action == GLFW_PRESS) {
+        float dist = camera.Position.x - .67;
+        dist *= dist;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.z - 1.16;
+        dist *= camera.Position.z - 1, 16;
+        dist = sqrt(dist);
+
+        if (dist <= 20.0f) {
+            std::cout << "HERE" << std::endl;
+            angP3 = 180;
+            y3 = .03;
+        }
+
+    }
+    if (key == GLFW_KEY_0 && action == GLFW_PRESS) {
+        float dist = camera.Position.x - .67;
+        dist *= dist;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.z - 1.16;
+        dist *= camera.Position.z - 1, 16;
+        dist = sqrt(dist);
+
+        if (dist <= 20.0f) {
+            std::cout << "HERE" << std::endl;
+            angP4 = 180;
+            y4 = .04;
+        }
+
+    }
+
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        float dist = camera.Position.x - .67;
+        dist *= dist;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.y - .51;
+        dist *= camera.Position.z - 1.16;
+        dist *= camera.Position.z - 1, 16;
+        dist = sqrt(dist);
+
+        if (dist <= 20.0f) {
+            std::cout << "HERE" << std::endl;
+            angP1 = angP2 = angP3 = angP4 = angP5 = angP6 = 0;
+            y2 = y3 = y4 = 0;
+        }
+
+    }
+}
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
@@ -1503,6 +1675,81 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     //model = alTogether * translate * scale;
     //Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
 
+    // front desk
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 10, height * .01, width * 1.5));
+    translate = glm::translate(model, glm::vec3(0.0, 2.0, 8));
+    model = alTogether * translate * scale;
+    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    // Menu Card
+    glm::mat4 identityMatrix = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .001, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.0, 8));
+    glm::mat4 rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP6), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp6"].drawCubeWithTexture(lightingShader, model);
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .001, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.1, 8));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP5), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp5"].drawCubeWithTexture(lightingShader, model);
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .001, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.12 + y4, 8));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP4), glm::vec3(.0f, 0.0f, 1.0f));
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp4"].drawCubeWithTexture(lightingShader, model);
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .01, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.13 + y3, 8));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP3), glm::vec3(.0f, 0.0f, 01.0f));
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp3"].drawCubeWithTexture(lightingShader, model);
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .01, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.14 + y2, 8));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP2), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp2"].drawCubeWithTexture(lightingShader, model);
+
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 1, height * .01, width * 1.5));
+    translate = glm::translate(model, glm::vec3(5.0, 2.15, 8));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(angP1), glm::vec3(0.0f, 0.0f, 1.0f));
+    //glm::mat4 rotateYMatrix = glm::rotate(identityMatrix, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    //glm::mat4 rotateZMatrix = glm::rotate(identityMatrix, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    model = alTogether * translate * rotateXMatrix * scale;
+    Cubes["mp1"].drawCubeWithTexture(lightingShader, model);
+
+    std::cout << "Distance: " << sqrt((camera.Position.x - .67) * (camera.Position.x - .67) *
+        (camera.Position.y - .51) * (camera.Position.y - .51) *
+        (camera.Position.z - 1.16) * (camera.Position.z - 1.16)) << std::endl;
+
+    cout << camera.Position.x << ' ' << camera.Position.y << ' ' << camera.Position.z << endl;
+
+
     // back table top
     model = glm::mat4(1.0f);
     translate = glm::mat4(1.0f);
@@ -1523,7 +1770,7 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
 
 }
 
-void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+void cart1(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
     float length = 1;
     float height = 1;
     float width = 1;
@@ -1634,6 +1881,9 @@ void cart1(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 1));
     model = alTogether * translate * scale;
     Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+
+    Models["oven"].Draw(modelShader);
+
 }
 
 glm::mat4 transform(glm::mat4 alTogether, glm::vec3 sc, glm::vec3 tr, glm::vec3 ro) {
@@ -1855,8 +2105,9 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
             glm::vec3(length * 2, height * 2, width * 2),
             glm::vec3(120.0, 0.0, 120.0 - i * 20.4),
             glm::vec3(0, 270, 0));
-
-        cart1(cubeVAO, lightingShader, model);
+        
+        cart2(cubeVAO, lightingShader, model);
+        //cart1(cubeVAO, lightingShader, modelShader, model);
     }
 
     vending_machine(lightingShader, alTogether);
@@ -1896,7 +2147,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
             glm::vec3(0, 90, 0));
 
         modelShader.setMat4("model", model);
-        //Models["table_chair_model"].Draw(modelShader);
+        Models["table_chair_model"].Draw(modelShader);
 
     }
 
@@ -1908,7 +2159,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
             glm::vec3(62.0, 0.0, 130.0 - i * 20),
             glm::vec3(0, 90, 0));
         modelShader.setMat4("model", model);
-        //Models["table_chair_model"].Draw(modelShader);
+        Models["table_chair_model"].Draw(modelShader);
     }
 
     model = transform(alTogether,
@@ -1916,7 +2167,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         glm::vec3(95.0, 0.0, 5),
         glm::vec3(0, 270, 0));
     modelShader.setMat4("model", model);
-    //Models["sofa"].Draw(modelShader);
+    Models["sofa"].Draw(modelShader);
 
     
     model = transform(alTogether,
@@ -1924,14 +2175,14 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         glm::vec3(10, -2, 10),
         glm::vec3(0, 270, 0));
     modelShader.setMat4("model", model);
-    //Models["woodswing"].Draw(modelShader);
+    Models["woodswing"].Draw(modelShader);
 
     model = transform(alTogether,
         glm::vec3(2, 2, 2),
         glm::vec3(30.0, -2, 10),
         glm::vec3(0, 270, 0));
     modelShader.setMat4("model", model);
-    //Models["woodswing"].Draw(modelShader);
+    Models["woodswing"].Draw(modelShader);
 
     decoration(lightingShader, modelShader, alTogether);
 }

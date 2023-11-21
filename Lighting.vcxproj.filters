@@ -74,6 +74,12 @@
     <None Include="vertexShader.vs">
       <Filter>Shaders\GenericShader</Filter>
     </None>
+    <None Include="fragmentShaderForPhongShading.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="vertexShaderForPhongShading.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
