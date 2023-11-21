@@ -25,13 +25,13 @@
 //#include "cylinder2.h"
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
 std::map<string, Cube> Cubes;
 std::map<string, Cylinder> Cylinders;
-std::map<string, Model> Models;
+std::unordered_map<string, Model> Models;
 
 unsigned int diffMap1, diffMap2, diffMap3, diffMap4, diffMap5, diffMap6;
 unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
@@ -192,7 +192,7 @@ void chair(map<string, Cube>& Cubes, unsigned int& cubeVAO, Shader& lightingShad
 
 void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
 void cart1(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
-void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
+void cart2(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether);
 void round_table(Shader& lightingShader, glm::mat4 alTogether);
 void round_chair(Shader& lightingShader, glm::mat4 alTogether);
 void round_table_chair(Shader& lightingShader, glm::mat4 alTogether);
@@ -498,10 +498,7 @@ int main()
     //Model oven("./resources/oven/oven.obj");
     
     // Model Loading 
-    /*Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
-    Model oven("./resources/oven/oven.obj");
-    Model monitor("./resources/monitor/10120_LCD_Computer_Monitor_v01_max2011_it2.obj");
-    Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");*/
+    
     
 
     //Model backpack("./resources/backpack/backpack.obj");
@@ -513,6 +510,21 @@ int main()
     Models.insert({ "table_chair_model", table_chair_model });
     Models.insert({ "sofa", sofa });
     Models.insert({ "woodswing", woodswing });*/
+    Model cooktop("./resources/cooktop/11633_Cooktop_v1_L3.obj");
+    Models.insert({ "cooktop", cooktop });
+    Model blender("./resources/blender/11628_kitchen_blender_v1_l2.obj");
+    Models.insert({ "blender", blender });
+    //Model wine("./resources/wine/Wine_bottle.obj");
+    //Models.insert({ "wine", wine });
+    Model microwave("./resources/microwave/10122_Microwave_Oven_v1_L3.obj");
+    Models.insert({ "microwave", microwave });
+    Model walloven("./resources/walloven/oven.obj");
+    Models.insert({ "walloven", walloven });
+    Model cooker("./resources/cooker/fogão_OBJ.obj");
+    Models.insert({ "cooker", cooker });
+
+    Model shrimp("./resources/shrimp/13560_Pot_of_Shrimp_Gumbo_v1_L3.obj");
+    Models.insert({ "shrimp", shrimp });
 
     // Fire animation texture
 //vector<unsigned int> texMap;
@@ -842,7 +854,7 @@ int main()
         // room(Cubes, cubeVAO, lightingShader, tmp);
         //food_court(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, modelShader, model);
-        cart2(cubeVAO, lightingShader, model);
+        cart2(cubeVAO, lightingShader, modelShader, model);
         //sphere.drawSphereWithTexture(lightingShader, model);
         
         glm::mat4 tempt = glm::mat4(1.0f);
@@ -1561,7 +1573,7 @@ unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum t
     return textureID;
 }
 
-void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) {
+void cart2(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
     float length = 1;
     float height = 1;
     float width = 1;
@@ -1677,6 +1689,43 @@ void cart2(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether) 
     model = transform(alTogether, glm::vec3(1, .01, 1.5), glm::vec3(0.2, 2.21, 6), glm::vec3(0, 0, 0));
     oven.setTextureProperty(grillMap, grillMap, 32.0);
     oven.drawCubeWithTexture(lightingShader, model);
+
+    // blender
+    model = transform(alTogether, glm::vec3(.02, .02, .02), glm::vec3(0.5, 3.1, 5), glm::vec3(90, 0, 0));
+    modelShader.setMat4("model", model);
+    Models["blender"].Draw(modelShader);
+    model = transform(alTogether, glm::vec3(.02, .02, .02), glm::vec3(0.5, 3.1, 4), glm::vec3(90, 0, 0));
+    modelShader.setMat4("model", model);
+    Models["blender"].Draw(modelShader);
+
+    // wine bottle
+    model = transform(alTogether, glm::vec3(.03, .03, .03), glm::vec3(.8, 2.1, 3), glm::vec3(-90, 0, 0));
+    modelShader.setMat4("model", model);
+    Models["cooktop"].Draw(modelShader);
+
+    // wall oven
+    model = transform(alTogether, glm::vec3(.015, .015, .015), glm::vec3(9.4, .1, 6.5), glm::vec3(-90, 0, 0));
+    model = transform(model, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 0, -90));
+    modelShader.setMat4("model", model);
+    Models["walloven"].Draw(modelShader);
+    
+    // cooker   
+    model = transform(alTogether, glm::vec3(.02, .02, .02), glm::vec3(4, 2.1, .6), glm::vec3(0, -90, 0));
+    modelShader.setMat4("model", model);
+    Models["cooker"].Draw(modelShader);
+
+    model = transform(alTogether, glm::vec3(.02, .02, .02), glm::vec3(6, 2.1, .6), glm::vec3(0, -90, 0));
+    modelShader.setMat4("model", model);
+    Models["cooker"].Draw(modelShader);
+
+    // mug
+    model = transform(alTogether, glm::vec3(.015, .015, .015), glm::vec3(4, 2.1, .6), glm::vec3(270, 0, 0));
+    modelShader.setMat4("model", model);
+    Models["shrimp"].Draw(modelShader);
+
+    model = transform(alTogether, glm::vec3(.015, .015, .015), glm::vec3(6, 2.1, .6), glm::vec3(270, 0, 0));
+    modelShader.setMat4("model", model);
+    Models["shrimp"].Draw(modelShader);
 
 
     // for right top shelf
@@ -2204,14 +2253,14 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
             glm::vec3(0.0, 0.0, 140.0 - i * 20.4), 
             glm::vec3(0, 90, 0));
         
-        cart2(cubeVAO, lightingShader, model);
+        cart2(cubeVAO, lightingShader, modelShader, model);
 
         model = transform(alTogether, 
             glm::vec3(length * 2, height * 2, width * 2),
             glm::vec3(120.0, 0.0, 120.0 - i * 20.4),
             glm::vec3(0, 270, 0));
         
-        cart2(cubeVAO, lightingShader, model);
+        cart2(cubeVAO, lightingShader, modelShader, model);
         //cart1(cubeVAO, lightingShader, modelShader, model);
     }
 
