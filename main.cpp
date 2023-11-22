@@ -38,7 +38,7 @@ unsigned int specMap1, specMap2, specMap3, specMap4, specMap5, specMap6;
 
 unsigned int ovenMap1, ovenMap2, grillMap;
 unsigned int ts1, ts2, ts3, ts4, ts5, ts6;
-unsigned int bowlMap, mugMap;
+unsigned int bowlMap, mugMap, courtWallMap;
 
 unsigned int mp1, mp2, mp3, mp4, mp5, mp6;
 float angP1, angP2, angP3, angP4, angP5, angP6;
@@ -553,10 +553,15 @@ int main()
     genTexture("./textures/stalls/stall5/tab.png", "./textures/stalls/stall5/tab.png", "st5t", 32.0, 1, 1);
     genTexture("./textures/stalls/stall6/tab.png", "./textures/stalls/stall6/tab.png", "st6t", 32.0, 1, 1);
 
+    genTexture("./textures/court/wall.jpg", "./textures/court/wall.jpg", "court_wall", 32, 1, 1);
+    genTexture("./textures/court/base.jpg", "./textures/court/base.jpg", "court_base", 32, 1, 1);
+
     string bowlPath = "./textures/stalls/stall1/bowl.jfif";
     bowlMap = loadTexture(bowlPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     string mugPath = "./textures/stalls/stall1/mug.png";
     mugMap = loadTexture(mugPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    /*string wallPath = "./textures/court/wall.jpg";
+    courtWallMap = loadTexture(wallPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);*/
 
     //genTexture("./textures/stalls/stall1/bowl.jfif", "./textures/stalls/stall1/bowl.jfif", "st1b", 32.0, 1, 1);
     //genTexture("./textures/stalls/stall2/bowl.jfif", "./textures/stalls/stall2/bowl.jfif", "st2b", 32.0, 1, 1);
@@ -578,10 +583,10 @@ int main()
     genTextureCylinder(1, .5, "default_texture.png", "default_texture.png", "table_bottom", 32, 0, 0);
 
 
-    /*string ovenPath1 = "./textures/oven/oven.jpg";
+    string ovenPath1 = "./textures/oven/oven.jpg";
     string ovenPath2 = "./textures/oven/oven2.jpg";
     ovenMap1 = loadTexture(ovenPath1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    ovenMap2 = loadTexture(ovenPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);*/
+    ovenMap2 = loadTexture(ovenPath2.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 
     string grillPath = "./textures/grill/grill.jpg";
     grillMap = loadTexture(grillPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -3778,7 +3783,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 120, height * .1, width * 140));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["st1t"].drawCubeWithTexture(lightingShader, model);
 
     photo_frame(lightingShader, alTogether);
     model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(-30, 0, 0), glm::vec3(0, 0, 0));
@@ -3803,7 +3808,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 140));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
 
     // right wall
     model = glm::mat4(1.0f);
@@ -3812,7 +3817,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 140));
     translate = glm::translate(model, glm::vec3(120.0, 0.0, 0.0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
 
     // starry left wall
     model = glm::mat4(1.0f);
