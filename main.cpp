@@ -209,8 +209,8 @@ void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogethe
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
 
 // settings
-const unsigned int SCR_WIDTH = 1000;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // modelling transform
 float rotateAngle_X = 0.0;
@@ -467,7 +467,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CSE 4208: Computer Graphics Laboratory", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Food Court", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -505,7 +505,7 @@ int main()
     
     // Models
 
-    /*Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
+    Model table_chair_model("./resources/table/Modern Elegant Chair and Table (OBJ).obj");
     Model sofa("./resources/sofa/sofa.obj");
     Model woodswing("./resources/woodswing/Models and Textures/woodswing.obj");
     Models.insert({ "table_chair_model", table_chair_model });
@@ -522,7 +522,7 @@ int main()
     Model cooker("./resources/cooker/fogão_OBJ.obj");
     Models.insert({ "cooker", cooker });
     Model shrimp("./resources/shrimp/13560_Pot_of_Shrimp_Gumbo_v1_L3.obj");
-    Models.insert({ "shrimp", shrimp });*/
+    Models.insert({ "shrimp", shrimp });
 
 
     // Generate Textures
@@ -1306,16 +1306,16 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.ProcessKeyboard(FORWARD, deltaTime * 2);
+        camera.ProcessKeyboard(FORWARD, deltaTime * 1.5);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.ProcessKeyboard(BACKWARD, deltaTime * 2);
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 1.5);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.ProcessKeyboard(LEFT, deltaTime * 2);
+        camera.ProcessKeyboard(LEFT, deltaTime * 1.5);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.ProcessKeyboard(RIGHT, deltaTime * 2);
+        camera.ProcessKeyboard(RIGHT, deltaTime * 1.5);
     }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
