@@ -227,7 +227,7 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(5.0f, 2.0f, 5.0f));
+Camera camera(glm::vec3(5.0f, 2.0f, 28.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -244,10 +244,10 @@ BasicCamera basic_camera(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ, V);
 
 // positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3(30.0f,  5.50f,  30.0f), /// Spot
-    glm::vec3(15.0f,  1.5f,  40.0f),   /// Point 1
-    glm::vec3(20.0f,  50.5f,  40.5f), /// Sun
-    glm::vec3(25.0f,  1.5f,  40.0f), // point 2
+    glm::vec3(05.0f,  2.5f,  10.0f), /// Spot
+    glm::vec3(8.0f,  2.5f,  10.0f),   /// Point 1
+    glm::vec3(12.0f,  2.5f,  10.5f), /// Sun
+    glm::vec3(15.0f,  2.5f,  10.0f), // point 2
 
     glm::vec3(25.0f,  10.5f,  40.0f), // disco 1
     glm::vec3(25.0f,  1.5f,  40.0f), // disco 2
@@ -555,6 +555,12 @@ int main()
 
     genTexture("./textures/court/wall.jpg", "./textures/court/wall.jpg", "court_wall", 32, 1, 1);
     genTexture("./textures/court/base.jpg", "./textures/court/base.jpg", "court_base", 32, 1, 1);
+    genTexture("./textures/court/abswall.jpg", "./textures/court/abswall.jpg", "abswall", 32, 1, 1);
+    genTexture("./textures/court/absbase.jpg", "./textures/court/absbase.jpg", "absbase", 32, 1, 1);
+
+    genTexture("./textures/court/tab1.jpg", "./textures/court/tab1.jpg", "tab1", 32, 1, 1);
+    genTexture("./textures/court/tab2.jpg", "./textures/court/tab2.jpg", "tab2", 32, 1, 1);
+    genTexture("./textures/court/sofa.jpg", "./textures/court/sofa.jpg", "sofa", 32, 1, 1);
 
     string bowlPath = "./textures/stalls/stall1/bowl.jfif";
     bowlMap = loadTexture(bowlPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -857,7 +863,7 @@ int main()
         rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
         rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
         rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y *.1, scale_Z * .1));
+        scaleMatrix = glm::scale(identityMatrix, glm::vec3(scale_X * .1, scale_Y * .1, scale_Z * .1));
         model = translateMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix * scaleMatrix;
 
         lightingShader.setMat4("model", model);
@@ -1318,11 +1324,11 @@ void processInput(GLFWwindow* window)
         else if (rotateAxis_Y) rotateAngle_Y -= 0.1;
         else rotateAngle_Z -= 0.1;
     }
-    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) translate_Y += 0.01;
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) translate_Y -= 0.01;
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) translate_X += 0.01;
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) translate_X -= 0.01;
-    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) translate_Z += 0.01;
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) translate_Y += 0.05;
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) translate_Y -= 0.05;
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) translate_X += 0.05;
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) translate_X -= 0.05;
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) translate_Z += 0.05;
     //if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) translate_Z -= 0.001;
     ////if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) scale_X += 0.001;
     //if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) scale_X -= 0.001;
@@ -3745,21 +3751,21 @@ void photo_frame(Shader& lightingShader, glm::mat4 alTogether) {
     glm::mat4 rotateYMatrix = glm::mat4(1.0f);
     glm::mat4 rotateZMatrix = glm::mat4(1.0f);
 
-    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(70, 15, 1), glm::vec3(0, 0, 0));
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(0, 15, 1), glm::vec3(0, -90, 0));
     Cubes[""].drawCubeWithTexture(lightingShader, model);
-    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(70, 8, 1), glm::vec3(0, 0, 0));
-    Cubes[""].drawCubeWithTexture(lightingShader, model);
-
-    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(75, 18, 1), glm::vec3(0, 0, 0));
-    Cubes[""].drawCubeWithTexture(lightingShader, model);
-    model = transform(alTogether, glm::vec3(4, 6, .3), glm::vec3(75, 10, 1), glm::vec3(0, 0, 0));
-    Cubes[""].drawCubeWithTexture(lightingShader, model);
-    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(75, 5, 1), glm::vec3(0, 0, 0));
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(0, 8, 1), glm::vec3(0, -90, 0));
     Cubes[""].drawCubeWithTexture(lightingShader, model);
 
-    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(81, 15, 1), glm::vec3(0, 0, 0));
+    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(0, 18, 1), glm::vec3(0, -90, 0));
     Cubes[""].drawCubeWithTexture(lightingShader, model);
-    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(81, 8, 1), glm::vec3(0, 0, 0));
+    model = transform(alTogether, glm::vec3(4, 6, .3), glm::vec3(0, 10, 1), glm::vec3(0, -90, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(4, 3, .3), glm::vec3(0, 5, 1), glm::vec3(0, -90, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(0, 15, 1), glm::vec3(0, 0, 0));
+    Cubes[""].drawCubeWithTexture(lightingShader, model);
+    model = transform(alTogether, glm::vec3(3, 4, .3), glm::vec3(0, 8, 1), glm::vec3(0, 0, 0));
     Cubes[""].drawCubeWithTexture(lightingShader, model);
     
 }
@@ -3768,6 +3774,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     float length = 1;
     float height = 1;
     float width = 1;
+
 
     // base
     glm::mat4 identityMatrix = glm::mat4(1.0f);
@@ -3781,24 +3788,43 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
 
 
     scale = glm::scale(model, glm::vec3(length * 120, height * .1, width * 140));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+    translate = glm::translate(model, glm::vec3(0, -0.02, 0.0));
     model = alTogether * translate * scale;
     Cubes["st1t"].drawCubeWithTexture(lightingShader, model);
 
-    photo_frame(lightingShader, alTogether);
-    model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(-30, 0, 0), glm::vec3(0, 0, 0));
-    photo_frame(lightingShader, model);
+    // banner
+    identityMatrix = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 120, height * 10, width * .1));
+    translate = glm::translate(model, glm::vec3(0.0, 20.0, 140.0));
+    model = alTogether * translate * scale;
+    Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
 
-    // Disco
-    Sphere disco = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, diffMap1, diffMap1, 0, 0, 1, 1);
-    scale = glm::scale(model, glm::vec3(length * 50, height * 50, width * 50));
-    translate = glm::translate(model, glm::vec3(800.0, 300.0, 800.0));
-    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
-    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
-    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
-    rotate = rotateXMatrix * rotateYMatrix * rotateZMatrix;
-    model = alTogether * translate * rotate * scale;
-    disco.drawSphereWithTexture(lightingShader, model);
+    // top
+    identityMatrix = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
+    translate = glm::mat4(1.0f);
+    scale = glm::scale(model, glm::vec3(length * 120, height * .1, width * 140));
+    translate = glm::translate(model, glm::vec3(0.0, 30.0, 0.0));
+    model = alTogether * translate * scale;
+    Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
+
+
+    //photo_frame(lightingShader, alTogether);
+    //model = transform(alTogether, glm::vec3(1, 1, 1), glm::vec3(-30, 0, 0), glm::vec3(0, 0, 0));
+    ////photo_frame(lightingShader, model);
+
+    //// Disco
+    //Sphere disco = Sphere(5.0f, 36, 18, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 32, diffMap1, diffMap1, 0, 0, 1, 1);
+    //scale = glm::scale(model, glm::vec3(length * 50, height * 50, width * 50));
+    //translate = glm::translate(model, glm::vec3(800.0, 300.0, 800.0));
+    //rotateXMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_X), glm::vec3(1.0f, 0.0f, 0.0f));
+    //rotateYMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Y), glm::vec3(0.0f, 1.0f, 0.0f));
+    //rotateZMatrix = glm::rotate(identityMatrix, glm::radians(rotateAngle_Z), glm::vec3(0.0f, 0.0f, 1.0f));
+    //rotate = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+    //model = alTogether * translate * rotate * scale;
+    //disco.drawSphereWithTexture(lightingShader, model);
 
 
     // left wall
@@ -3806,7 +3832,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     translate = glm::mat4(1.0f);
     scale = glm::mat4(1.0f);
     scale = glm::scale(model, glm::vec3(length * .1, height * 30, width * 140));
-    translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+    translate = glm::translate(model, glm::vec3(-0.02, 0.0, 0.0));
     model = alTogether * translate * scale;
     Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
 
@@ -3835,7 +3861,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.1));
     model = alTogether * translate * scale;
-    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["starry"].drawCubeWithTexture(lightingShader, model);
 
     // starry base
     model = glm::mat4(1.0f);
@@ -3843,7 +3869,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
     translate = glm::translate(model, glm::vec3(0.0, 0.1, 0.0));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["absbase"].drawCubeWithTexture(lightingShader, model);
 
 
     // starry right wall
@@ -3862,7 +3888,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(80.0, 0.0, 0.1));
     model = alTogether * translate * scale;
-    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["starry"].drawCubeWithTexture(lightingShader, model);
 
     // starry base
     model = glm::mat4(1.0f);
@@ -3870,7 +3896,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
     translate = glm::translate(model, glm::vec3(80.0, 0.1, 0.0));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["absbase"].drawCubeWithTexture(lightingShader, model);
 
     // starry mid base
     model = glm::mat4(1.0f);
@@ -3879,7 +3905,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * .1, width * 40));
     translate = glm::translate(model, glm::vec3(40.0, 0.1, 0.0));
     model = alTogether * translate * scale;
-    Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["absbase"].drawCubeWithTexture(lightingShader, model);
 
     // starry mid back
     model = glm::mat4(1.0f);
@@ -3887,7 +3913,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 40, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(40, 0, 0.1));
     model = alTogether * translate * scale;
-    //Cubes["abs1"].drawCubeWithTexture(lightingShader, model);
+    Cubes["starry"].drawCubeWithTexture(lightingShader, model);
 
 
     // back wall
@@ -3897,7 +3923,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
     scale = glm::scale(model, glm::vec3(length * 120, height * 30, width * .1));
     translate = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
     model = alTogether * translate * scale;
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["court_wall"].drawCubeWithTexture(lightingShader, model);
 
 
     model = glm::mat4(1.0f);
@@ -3996,7 +4022,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
             glm::vec3(0, 0, 0));
         //round_table_chair(lightingShader, model);
     }
-
+    Cubes["tab1"].drawCubeWithTexture(lightingShader, model);
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
             glm::vec3(.05, .05, .05),
@@ -4008,7 +4034,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
 
     }
 
-    Cubes["default_cube"].drawCubeWithTexture(lightingShader, model);
+    Cubes["tab2"].drawCubeWithTexture(lightingShader, model);
 
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
@@ -4018,7 +4044,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         modelShader.setMat4("model", model);
         Models["table_chair_model"].Draw(modelShader);
     }
-
+    Cubes["tab1"].drawCubeWithTexture(lightingShader, model);
     for (int i = 0; i < 4; ++i) {
         model = transform(alTogether,
             glm::vec3(.05, .05, .05),
@@ -4027,7 +4053,7 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
         modelShader.setMat4("model", model);
         Models["table_chair_model"].Draw(modelShader);
     }
-
+    Cubes["sofa"].drawCubeWithTexture(lightingShader, model);
     model = transform(alTogether,
         glm::vec3(5, 5, 5),
         glm::vec3(95.0, 0.0, 5),
@@ -4054,27 +4080,6 @@ void food_court(unsigned int& cubeVAO, Shader& lightingShader, Shader& modelShad
 }
 
 void decoration(Shader& lightingShader, Shader& modelShader, glm::mat4 alTogether) {
-    glm::mat4 model = transform(alTogether, glm::vec3(10, 5, 1),
-        glm::vec3(10, 0, 0),
-        glm::vec3(0, 0, 0));
-
-
-    //Cubes["fire_animation"].drawCubeWithTexture(lightingShader, model);
-    //for (int i = 0; i < 5; ++i) {
-    //    unsigned int DiffMap;
-    //    unsigned int SpecMap;
-    //    for (int i = 0; i < 10; ++i) {
-    //        string diffPath = "./textures/fire/" + to_string(i + 1) + ".png";
-    //        DiffMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    //        SpecMap = loadTexture(diffPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    //        Cube cube = Cube(DiffMap, SpecMap, 32, 0.0f, 0.0f, 0, 0);
-    //        //Cubes.insert({ "fire_animation", cube });
-    //        cube.drawCubeWithTexture(lightingShader, model);
-    //    }
-    //}
-
-
-
     
 }
 

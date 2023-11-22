@@ -69,14 +69,17 @@ void main()
     // point lights
 
     result += CalcPointLight(material, pointLights[0], N, FragPos, V);
-    //result += CalcPointLight(material, pointLights[1], N, FragPos, V);
-    //result += CalcSpotLight(material, spotLights[0], N, FragPos, V);
+    result += CalcPointLight(material, pointLights[1], N, FragPos, V);
+    result += CalcSpotLight(material, spotLights[0], N, FragPos, V);
+    result += CalcDirLight(material, directionLights[0], N, FragPos, V);
+    
+    
     //result += CalcSpotLight(material, spotLights[1], N, FragPos, V);
     //result += CalcSpotLight(material, spotLights[2], N, FragPos, V);
     //result += CalcSpotLight(material, spotLights[3], N, FragPos, V);
     //result += CalcSpotLight(material, spotLights[4], N, FragPos, V);
 
-    result += CalcDirLight(material, directionLights[0], N, FragPos, V);
+   
       
     FragColor = vec4(result, 1.0);
     //FragColor = vec4(1.0, 1.0, 1.0, 1.0);
